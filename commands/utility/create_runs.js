@@ -9,19 +9,25 @@ module.exports = {
             .setName('event')
             .setDescription('Pull runs from this event ID')
             .setRequired(true))
+    .addIntegerOption(option =>
+        option
+            .setName('channel')
+            .setDescription('Channel ID number where threads will be created')
+            .setRequired(true)
+    )
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels),
     async execute(interaction) {
         let obj;
         const res = await fetch('https://tracker.preventathon.com/tracker/api/v2/runs/');
 
         const eventID = interaction.options.getInteger('event');
+        const channel = interaction.options.getInteger('channel');
         obj = await res.json();
         
         for(let i = 0; i < obj.count; i++) {
             let newObj = new Object();
             let currentRun = obj.results[i];
             
-            const forum = '1277184196745363486';
             if (currentRun.event.id === eventID && currentRun.runners[0].name != 'Staff') {
                 let runnerNames = [];
                 let runnerPronouns = [];
@@ -95,7 +101,7 @@ module.exports = {
                 console.log(`\nRun Info for ${newObj.name}:`)
                 console.log(newMessage);
                 
-                // const thread = await forum.threads
+                // const thread = await channel.threads
                 //    .create({
                 //         name: newObj.name,
                 //         autoArchiveDuration: ThreadAutoArchiveDuration.OneWeek,
