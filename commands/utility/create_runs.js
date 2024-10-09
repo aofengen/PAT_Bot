@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, PermissionFlagsBits, ThreadAutoArchiveDuration } = require('discord.js');
-const { cubsUserId } = require('config.json');
+const { cubsUserId } = require('../../config.json');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -21,11 +21,15 @@ module.exports = {
         if (interaction.user.id === cubsUserId) {
             const res = await fetch('https://tracker.preventathon.com/tracker/api/v2/runs/');
             const eventID = interaction.options.getInteger('event');
-            const client = interaction.client;
-            const forum = client.channels.cache.get(interaction.options.getString('channel'));
-            const threadList = await forum.threads.fetchActive();
+            const forum = interaction.client.channels.cache.get(interaction.options.getString('channel'));
             const obj = await res.json();
-            
+            const threadList = await forum.threads.fetchActive();
+            const threadIds = new Map();
+
+            threadList.threads.forEach((value, key) => {
+                threadIds.set(value.name, key); 
+            });
+
             for(let i = 0; i < obj.count; i++) {
                 let newObj = new Object();
                 let currentRun = obj.results[i];
@@ -37,7 +41,6 @@ module.exports = {
                     let commentatorNames = [];
                     let commentatorPronouns = [];
 
-                    // console.log(currentRun);
                     newObj.name = currentRun.name;
                     newObj.category = currentRun.category;
                     newObj.console = currentRun.console;
@@ -71,7 +74,6 @@ module.exports = {
                         newObj.commentators = commentatorNames;
                         newObj.commentatorPronouns = commentatorPronouns;
                     } 
-                    // console.log(newObj);
 
                     let runners = "";
                     let comms = "";
@@ -102,22 +104,44 @@ module.exports = {
                     
                     console.log(`\nRun Info for ${newObj.name}:`)
                     console.log(newMessage);
-                    
-    //TODO: check thread list to see if thread with name of game exists. If yes, pull thread ID and edit thread with newMessage, else create new thread with newMessage
 
-                    try {
-                        const thread = await forum.threads.create({
-                                name: newObj.name,
-                                autoArchiveDuration: ThreadAutoArchiveDuration.OneWeek,
-                                message: {
-                                    content: newMessage
-                                },
-                                reason: `Run information/discussion for ${newObj.name}`
+                    if (!threadIds.has(newObj.name)) {
+                        try {
+                            const newThread = await forum.threads.create({
+                                    name: newObj.name,
+                                    autoArchiveDuration: ThreadAutoArchiveDuration.OneWeek,
+                                    message: {
+                                        content: newMessage
+                                    },
+                                    reason: `Run information/discussion for ${newObj.name}`
+                            });
+                            
+                            console.log(`Created thread: ${newThread.name}`);
+                        } catch (e) {
+                            console.error(e);
+                        }
+                    } else {
+                        let threadIdNum;
+                        threadIds.forEach((value, key) => {
+                            if (key == newObj.name) {
+                                threadIdNum = value;
+                            }
                         });
-                        
-                        console.log(`Created thread: ${thread.name}`);
-                    } catch (e) {
-                        console.error(e);
+
+                        try {
+                            const changedThread = await forum.threads.fetch(threadIdNum);
+                            console.log(changedThread.messages);
+
+                            // changedThread.edit({
+                            //     message: {
+                            //         content: newMessage
+                            //     }
+                            // });
+
+                        console.log(`Edited thread: ${newObj.name}`);
+                        } catch (e) {
+                            console.error(e);
+                        }
                     }
                 } else {
                     continue;
