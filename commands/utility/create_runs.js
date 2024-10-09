@@ -132,13 +132,17 @@ module.exports = {
                             const changedThread = await forum.threads.fetch(threadIdNum);
                             console.log(changedThread.messages);
 
-                            // changedThread.edit({
-                            //     message: {
-                            //         content: newMessage
-                            //     }
-                            // });
+                            /*  Currently does not work because discord doesn't allow thread descriptions to be changed. If this changes in the future,
+                                this method would be much more prefered over adding a new message to the bottom
+                            changedThread.edit({
+                                message: {
+                                    content: newMessage
+                                }
+                            }); */
 
-                        console.log(`Edited thread: ${newObj.name}`);
+                            changedThread.send(`Updated run information for ${newObj.name}:\n${newMessage}`);
+
+                            console.log(`Added updated message to thread: ${newObj.name}`);
                         } catch (e) {
                             console.error(e);
                         }
