@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, PermissionFlagsBits, ThreadAutoArchiveDuration } = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits, ThreadAutoArchiveDuration, EmbedBuilder } = require('discord.js');
 const { cubsUserId } = require('../../config.json');
 
 module.exports = {
@@ -100,10 +100,16 @@ module.exports = {
 
                     const newMessage = `Game: ${newObj.name}\nCategory: ${newObj.category}\nPlatform: ${newObj.console}\nRun Estimate: ${newObj.estimate}\n` + 
                                     `Runners: ${runners}\nCommentators: ${comms}\nHost: @${newObj.host} \(${newObj.hostPronouns}\)`.trimStart();
-
-                    
+                   
                     console.log(`\nRun Info for ${newObj.name}:`)
                     console.log(newMessage);
+
+                    // If able to use embeds, use the following instead of a generic message
+                    // const newEmbed = new EmbedBuilder()
+                    //     .setTitle(newObj.name)
+                    //     .setDescription(`Run information for ${newObj.name}`)
+                    //     .addFields({ name: 'Run Info', value: newMessage })
+                    //     .setTimestamp();
 
                     if (!threadIds.has(newObj.name)) {
                         try {
@@ -111,12 +117,16 @@ module.exports = {
                                     name: newObj.name,
                                     autoArchiveDuration: ThreadAutoArchiveDuration.OneWeek,
                                     message: {
-                                        content: newMessage
+                                        content: `Communication Thread for ${newObj.name}`
                                     },
                                     reason: `Run information/discussion for ${newObj.name}`
                             });
                             
                             console.log(`Created thread: ${newThread.name}`);
+
+                            const infoMessage = newThread.id;
+                            infoMessage.send(`Run information for ${newThread.name}:\n${newMessage}`);
+                            //infoMessage.send({embeds: [newEmbed]});
                         } catch (e) {
                             console.error(e);
                         }
@@ -130,7 +140,10 @@ module.exports = {
 
                         try {
                             const changedThread = await forum.threads.fetch(threadIdNum);
-                            console.log(changedThread.messages);
+                            // const currentEmbed = changedThread.message.embeds[0];
+                            // const newEmbed = EmbedBuilder.from(currentEmbed).setFields({ name: 'Run Info', value: newMessage }).setTimestamp();
+
+                            // changedThread.message.edit({embeds: [newEmbed]});
 
                             /*  Currently does not work because discord doesn't allow thread descriptions to be changed. If this changes in the future,
                                 this method would be much more prefered over adding a new message to the bottom
