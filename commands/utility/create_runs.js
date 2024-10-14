@@ -125,6 +125,7 @@ module.exports = {
                             console.log(`Created thread: ${newThread.name}`);
 
                             const infoMessage = newThread.id;
+                            //infoMessage is bnot set properly, needs to be fixed
                             infoMessage.send(`Run information for ${newThread.name}:\n${newMessage}`);
                             //infoMessage.send({embeds: [newEmbed]});
                         } catch (e) {
