@@ -21,10 +21,10 @@ module.exports = {
         //let userID = interaction.user.id;
         if (interaction.user.id === cubsUserId) {
         //if (userID.roles.cache.some(role => role.name === 'Moderator')) {
-            const res = await fetch('https://tracker.preventathon.com/tracker/api/v2/runs/');
+            const trackerData = await fetch('https://tracker.preventathon.com/tracker/api/v2/runs/');
             const eventID = interaction.options.getInteger('event');
             const forum = interaction.client.channels.cache.get(interaction.options.getString('channel'));
-            const obj = await res.json();
+            const obj = await trackerData.json();
             const threadList = await forum.threads.fetchActive();
             const threadIds = new Map();
 
@@ -139,6 +139,7 @@ module.exports = {
                                     autoArchiveDuration: ThreadAutoArchiveDuration.OneWeek,
                                     message: {
                                         content: `Communication Thread for ${newObj.name}`
+                                        //embeds: [newEmbed]
                                     },
                                     reason: `Run information/discussion for ${newObj.name}`
                             });
@@ -154,36 +155,35 @@ module.exports = {
                             console.error(e);
                         }
                     } else {
-                        // let threadIdNum;
-                        // threadIds.forEach((value, key) => {
-                        //     if (key == newObj.name) {
-                        //         threadIdNum = value;
-                        //     }
-                        // });
+                        let threadIdNum;
+                        threadIds.forEach((value, key) => {
+                            if (key == newObj.name) {
+                                threadIdNum = value;
+                            }
+                        });
                         try {
-                            //const changedThreadId = await forum.threads.fetch(threadIdNum);
-                            
-
-                            // console.log(`L. 163 - changedThread.messages: ${changedThread.id}`)
-                            // const currentEmbed = changedThread.pins[0].id;
+                            const changedThreadId = await forum.threads.fetch(threadIdNum);
 
                             //TODO: FIX THIS LATER PLEASE FOR THE LOVE OF GOD
                             //crappy hack to store embed ID in the tracker (tags array of the speedrun object) since discord makes it stupidly hard to pull the message ID from a message within a thread
-                            const changedThreadId = newObj.tags[0];
-                            changedThreadId.edit({embeds: [newEmbed]});
+                            
+                            // const messageId = changedThreadId.messages.fetch(currentRun.tags[0]);
+                            // console.log(`messageId: ${messageId}`)
+                            // messageId.edit({embeds: [newEmbed]});
 
                             //Keeping in case we ever need to not use embeds for some reason
                             //changedThread.send(`Updated run information for ${newObj.name}:\n${newMessage}`);
+                            changedThreadId.send({embeds: [newEmbed]});
                             console.log(`Updated embed in thread: ${newObj.name}`);
+                            await new Promise(resolve => setTimeout(resolve, 3000));
                             
                         } catch (e) {
                             console.error(e);
                         }
-                        await new Promise(resolve => setTimeout(resolve, 3000));
                     }
                 }
+            }
             await interaction.reply('Runs for event #' + eventID + ' pulled!');
-            } 
         } else {
             await interaction.reply('Not authorized to run this command!');
         }
