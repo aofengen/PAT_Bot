@@ -18,7 +18,9 @@ module.exports = {
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels),
     async execute(interaction) {
+        //let userID = interaction.user.id;
         if (interaction.user.id === cubsUserId) {
+        //if (userID.roles.cache.some(role => role.name === 'Moderator')) {
             const res = await fetch('https://tracker.preventathon.com/tracker/api/v2/runs/');
             const eventID = interaction.options.getInteger('event');
             const forum = interaction.client.channels.cache.get(interaction.options.getString('channel'));
@@ -45,8 +47,14 @@ module.exports = {
                     newObj.category = currentRun.category;
                     newObj.console = currentRun.console;
                     newObj.estimate = currentRun.run_time;
-                    newObj.host = currentRun.hosts[0].name;
-                    newObj.hostPronouns = currentRun.hosts[0].pronouns != "" ? currentRun.hosts[0].pronouns : "No Pronouns";
+
+                    if (currentRun.hosts.length == 0) {
+                        newObj.host = "None";
+                        newObj.hostPronouns = "";
+                    } else {
+                        newObj.host = currentRun.hosts[0].name;
+                        newObj.hostPronouns = currentRun.hosts[0].pronouns != "" ? currentRun.hosts[0].pronouns : "No Pronouns";
+                    }
 
                     if (currentRun.runners.length == 1) {
                         newObj.runners = currentRun.runners[0].name;
@@ -57,7 +65,7 @@ module.exports = {
                             runnerPronouns.push(currentRun.runners[j].pronouns != "" ? currentRun.runners[j].pronouns : "No Pronouns");
                         }
                         newObj.runners = runnerNames;
-                        newObj.runnerPronouns = runnerPronouns
+                        newObj.runnerPronouns = runnerPronouns;
                     } 
 
                     if (currentRun.commentators.length == 0) {
@@ -77,12 +85,25 @@ module.exports = {
 
                     let runners = "";
                     let comms = "";
+                    let hosts = "";
 
                     if (!Array.isArray(newObj.runners)) {
-                        runners = `@${newObj.runners} \(${newObj.runnerPronouns})`
+                        runners = `${newObj.runners} \(${newObj.runnerPronouns})`
                     } else {
                         for (let i = 0; i < newObj.runners.length; i++) {
-                            runners += `@${newObj.runners[i]} \(${newObj.runnerPronouns[i]}), `
+                            runners += `${newObj.runners[i]} \(${newObj.runnerPronouns[i]}), `
+                        }
+                    }
+
+                    if (!Array.isArray(newObj.hosts)) {
+                        if (newObj.host == "None") {
+                            hosts = `${newObj.host}`;
+                        } else {
+                            hosts = `${newObj.host} \(${newObj.hostPronouns})`
+                        }
+                    } else {
+                        for (let i = 0; i < newObj.hosts.length; i++) {
+                            hosts += `${newObj.hosts[i]} \(${newObj.hostsPronouns[i]}), `
                         }
                     }
 
@@ -90,26 +111,26 @@ module.exports = {
                         if (newObj.commentators == "None") {
                             comms = `${newObj.commentators}`;
                         } else {
-                            comms = `@${newObj.commentators} \(${newObj.commentatorPronouns})`
+                            comms = `${newObj.commentators} \(${newObj.commentatorPronouns})`
                         }
                     } else {
                         for (let i = 0; i < newObj.commentators.length; i++) {
-                            comms += `@${newObj.commentators[i]} \(${newObj.commentatorPronouns[i]}), `
+                            comms += `${newObj.commentators[i]} \(${newObj.commentatorPronouns[i]}), `
                         }
                     }
 
                     const newMessage = `Game: ${newObj.name}\nCategory: ${newObj.category}\nPlatform: ${newObj.console}\nRun Estimate: ${newObj.estimate}\n` + 
-                                    `Runners: ${runners}\nCommentators: ${comms}\nHost: @${newObj.host} \(${newObj.hostPronouns}\)`.trimStart();
+                                    `Runners: ${runners}\nCommentators: ${comms}\nHost: ${hosts}`.trimStart();
                    
                     console.log(`\nRun Info for ${newObj.name}:`)
                     console.log(newMessage);
 
                     // If able to use embeds, use the following instead of a generic message
-                    // const newEmbed = new EmbedBuilder()
-                    //     .setTitle(newObj.name)
-                    //     .setDescription(`Run information for ${newObj.name}`)
-                    //     .addFields({ name: 'Run Info', value: newMessage })
-                    //     .setTimestamp();
+                    const newEmbed = new EmbedBuilder()
+                        .setTitle(newObj.name)
+                        .setDescription(`Run information for ${newObj.name}`)
+                        .addFields({ name: 'Run Info', value: newMessage })
+                        .setTimestamp();
 
                     if (!threadIds.has(newObj.name)) {
                         try {
@@ -124,48 +145,45 @@ module.exports = {
                             
                             console.log(`Created thread: ${newThread.name}`);
 
-                            const infoMessage = newThread.id;
-                            //infoMessage is not set properly, needs to be fixed
-                            infoMessage.send(`Run information for ${newThread.name}:\n${newMessage}`);
-                            //infoMessage.send({embeds: [newEmbed]});
+                            //keeping in case we ever need to not use embeds
+                            //newThread.send(`Run information for ${newThread.name}:\n${newMessage}`);
+                            newThread.send({embeds: [newEmbed]});
+
+                            await new Promise(resolve => setTimeout(resolve, 3000));
                         } catch (e) {
                             console.error(e);
                         }
                     } else {
-                        let threadIdNum;
-                        threadIds.forEach((value, key) => {
-                            if (key == newObj.name) {
-                                threadIdNum = value;
-                            }
-                        });
-
+                        // let threadIdNum;
+                        // threadIds.forEach((value, key) => {
+                        //     if (key == newObj.name) {
+                        //         threadIdNum = value;
+                        //     }
+                        // });
                         try {
-                            const changedThread = await forum.threads.fetch(threadIdNum);
-                            // const currentEmbed = changedThread.message.embeds[0];
-                            // const newEmbed = EmbedBuilder.from(currentEmbed).setFields({ name: 'Run Info', value: newMessage }).setTimestamp();
+                            //const changedThreadId = await forum.threads.fetch(threadIdNum);
+                            
 
-                            // changedThread.message.edit({embeds: [newEmbed]});
+                            // console.log(`L. 163 - changedThread.messages: ${changedThread.id}`)
+                            // const currentEmbed = changedThread.pins[0].id;
 
-                            /*  Currently does not work because discord doesn't allow thread descriptions to be changed. If this changes in the future,
-                                this method would be much more prefered over adding a new message to the bottom
-                            changedThread.edit({
-                                message: {
-                                    content: newMessage
-                                }
-                            }); */
+                            //TODO: FIX THIS LATER PLEASE FOR THE LOVE OF GOD
+                            //crappy hack to store embed ID in the tracker (tags array of the speedrun object) since discord makes it stupidly hard to pull the message ID from a message within a thread
+                            const changedThreadId = newObj.tags[0];
+                            changedThreadId.edit({embeds: [newEmbed]});
 
-                            changedThread.send(`Updated run information for ${newObj.name}:\n${newMessage}`);
-
-                            console.log(`Added updated message to thread: ${newObj.name}`);
+                            //Keeping in case we ever need to not use embeds for some reason
+                            //changedThread.send(`Updated run information for ${newObj.name}:\n${newMessage}`);
+                            console.log(`Updated embed in thread: ${newObj.name}`);
+                            
                         } catch (e) {
                             console.error(e);
                         }
+                        await new Promise(resolve => setTimeout(resolve, 3000));
                     }
-                } else {
-                    continue;
                 }
-            }
             await interaction.reply('Runs for event #' + eventID + ' pulled!');
+            } 
         } else {
             await interaction.reply('Not authorized to run this command!');
         }
