@@ -14,16 +14,21 @@ module.exports = {
         option
             .setName('channel')
             .setDescription('Channel ID number where threads will be created')
-            .setRequired(true)
-    )
+            .setRequired(true))
+    .addBooleanOption(option =>
+        option
+            .setName('fromFile')
+            .setDescription('Create/Update backup runs from provided JSON File')
+            .setRequired(true))
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels),
     async execute(interaction) {
-        //let userID = interaction.user.id;
-        if (interaction.user.id === cubsUserId) {
-        //if (userID.roles.cache.some(role => role.name === 'Moderator')) {
+        // let userID = interaction.user.id;
+    if (interaction.user.id === cubsUserId) {
+        // if (userID.roles.cache.some(role => role.name === 'Moderator')) {
             const trackerData = await fetch('https://tracker.preventathon.com/tracker/api/v2/runs/');
             const eventID = interaction.options.getInteger('event');
             const forum = interaction.client.channels.cache.get(interaction.options.getString('channel'));
+            const fromFile = interaction.options.getBoolean('fromfile');
             const obj = await trackerData.json();
             const threadList = await forum.threads.fetchActive();
             const threadIds = new Map();
@@ -31,97 +36,102 @@ module.exports = {
             threadList.threads.forEach((value, key) => {
                 threadIds.set(value.name, key); 
             });
+            
+            if (fromFile === false) {
+                for(let i = 0; i < obj.count; i++) {
+                    let newObj = new Object();
+                    let currentRun = obj.results[i];
+                    
+                    if (currentRun.event.id === eventID && currentRun.runners[0].name != 'Staff') {
+                        let runnerNames = [];
+                        let runnerPronouns = [];
 
-            for(let i = 0; i < obj.count; i++) {
-                let newObj = new Object();
-                let currentRun = obj.results[i];
-                
-                if (currentRun.event.id === eventID && currentRun.runners[0].name != 'Staff') {
-                    let runnerNames = [];
-                    let runnerPronouns = [];
+                        let commentatorNames = [];
+                        let commentatorPronouns = [];
 
-                    let commentatorNames = [];
-                    let commentatorPronouns = [];
+                        newObj.name = currentRun.name;
+                        newObj.category = currentRun.category;
+                        newObj.console = currentRun.console;
+                        newObj.estimate = currentRun.run_time;
+                        newObj.layout = currentRun.layout;
 
-                    newObj.name = currentRun.name;
-                    newObj.category = currentRun.category;
-                    newObj.console = currentRun.console;
-                    newObj.estimate = currentRun.run_time;
-
-                    if (currentRun.hosts.length == 0) {
-                        newObj.host = "None";
-                        newObj.hostPronouns = "";
-                    } else {
-                        newObj.host = currentRun.hosts[0].name;
-                        newObj.hostPronouns = currentRun.hosts[0].pronouns != "" ? currentRun.hosts[0].pronouns : "No Pronouns";
-                    }
-
-                    if (currentRun.runners.length == 1) {
-                        newObj.runners = currentRun.runners[0].name;
-                        newObj.runnerPronouns = currentRun.runners[0].pronouns != "" ? currentRun.runners[0].pronouns : "No Pronouns";
-                    } else {
-                        for (let j = 0; j < currentRun.runners.length; j++) {
-                            runnerNames.push(currentRun.runners[j].name);
-                            runnerPronouns.push(currentRun.runners[j].pronouns != "" ? currentRun.runners[j].pronouns : "No Pronouns");
-                        }
-                        newObj.runners = runnerNames;
-                        newObj.runnerPronouns = runnerPronouns;
-                    } 
-
-                    if (currentRun.commentators.length == 0) {
-                        newObj.commentators = "None";
-                        newObj.commentatorPronouns = "";
-                    } else if (currentRun.commentators.length == 1) {
-                        newObj.commentators = currentRun.commentators[0].name;
-                        newObj.commentatorPronouns = currentRun.commentators[0].pronouns != "" ? currentRun.commentators[0].pronouns : "No Pronouns";
-                    } else {
-                        for (let j = 0; j < currentRun.commentators.length; j++) {
-                            commentatorNames.push(currentRun.commentators[j].name);
-                            commentatorPronouns.push(currentRun.commentators[j].pronouns != "" ? currentRun.commentators[j].pronouns : "No Pronouns")
-                        }
-                        newObj.commentators = commentatorNames;
-                        newObj.commentatorPronouns = commentatorPronouns;
-                    } 
-
-                    let runners = "";
-                    let comms = "";
-                    let hosts = "";
-
-                    if (!Array.isArray(newObj.runners)) {
-                        runners = `${newObj.runners} \(${newObj.runnerPronouns})`
-                    } else {
-                        for (let i = 0; i < newObj.runners.length; i++) {
-                            runners += `${newObj.runners[i]} \(${newObj.runnerPronouns[i]}), `
-                        }
-                    }
-
-                    if (!Array.isArray(newObj.hosts)) {
-                        if (newObj.host == "None") {
-                            hosts = `${newObj.host}`;
+                        if (currentRun.hosts.length == 0) {
+                            newObj.host = "None";
+                            newObj.hostPronouns = "";
                         } else {
-                            hosts = `${newObj.host} \(${newObj.hostPronouns})`
+                            newObj.host = currentRun.hosts[0].name;
+                            newObj.hostPronouns = currentRun.hosts[0].pronouns != "" ? currentRun.hosts[0].pronouns : "No Pronouns";
                         }
-                    } else {
-                        for (let i = 0; i < newObj.hosts.length; i++) {
-                            hosts += `${newObj.hosts[i]} \(${newObj.hostsPronouns[i]}), `
-                        }
-                    }
 
-                    if (!Array.isArray(newObj.commentators)) {
-                        if (newObj.commentators == "None") {
-                            comms = `${newObj.commentators}`;
+                        if (currentRun.runners.length == 1) {
+                            newObj.runners = currentRun.runners[0].name;
+                            newObj.runnerPronouns = currentRun.runners[0].pronouns != "" ? currentRun.runners[0].pronouns : "No Pronouns";
                         } else {
-                            comms = `${newObj.commentators} \(${newObj.commentatorPronouns})`
+                            for (let j = 0; j < currentRun.runners.length; j++) {
+                                runnerNames.push(currentRun.runners[j].name);
+                                runnerPronouns.push(currentRun.runners[j].pronouns != "" ? currentRun.runners[j].pronouns : "No Pronouns");
+                            }
+                            newObj.runners = runnerNames;
+                            newObj.runnerPronouns = runnerPronouns;
+                        } 
+
+                        if (currentRun.commentators.length == 0) {
+                            newObj.commentators = "None";
+                            newObj.commentatorPronouns = "";
+                        } else if (currentRun.commentators.length == 1) {
+                            newObj.commentators = currentRun.commentators[0].name;
+                            newObj.commentatorPronouns = currentRun.commentators[0].pronouns != "" ? currentRun.commentators[0].pronouns : "No Pronouns";
+                        } else {
+                            for (let j = 0; j < currentRun.commentators.length; j++) {
+                                commentatorNames.push(currentRun.commentators[j].name);
+                                commentatorPronouns.push(currentRun.commentators[j].pronouns != "" ? currentRun.commentators[j].pronouns : "No Pronouns")
+                            }
+                            newObj.commentators = commentatorNames;
+                            newObj.commentatorPronouns = commentatorPronouns;
+                        } 
+
+                        let runners = "";
+                        let comms = "";
+                        let hosts = "";
+
+                        if (!Array.isArray(newObj.runners)) {
+                            runners = `${newObj.runners} \(${newObj.runnerPronouns})`
+                        } else {
+                            for (let i = 0; i < newObj.runners.length; i++) {
+                                runners += `${newObj.runners[i]} \(${newObj.runnerPronouns[i]}), `
+                            }
+                        }
+
+                        if (!Array.isArray(newObj.hosts)) {
+                            if (newObj.host == "None") {
+                                hosts = `${newObj.host}`;
+                            } else {
+                                hosts = `${newObj.host} \(${newObj.hostPronouns})`
+                            }
+                        } else {
+                            for (let i = 0; i < newObj.hosts.length; i++) {
+                                hosts += `${newObj.hosts[i]} \(${newObj.hostsPronouns[i]}), `
+                            }
+                        }
+
+                        if (!Array.isArray(newObj.commentators)) {
+                            if (newObj.commentators == "None") {
+                                comms = `${newObj.commentators}`;
+                            } else {
+                                comms = `${newObj.commentators} \(${newObj.commentatorPronouns})`
+                            }
+                        } else {
+                            for (let i = 0; i < newObj.commentators.length; i++) {
+                                comms += `${newObj.commentators[i]} \(${newObj.commentatorPronouns[i]}), `
+                            }
                         }
                     } else {
-                        for (let i = 0; i < newObj.commentators.length; i++) {
-                            comms += `${newObj.commentators[i]} \(${newObj.commentatorPronouns[i]}), `
-                        }
+                        //coming soon
                     }
 
                     const newMessage = `Game: ${newObj.name}\nCategory: ${newObj.category}\nPlatform: ${newObj.console}\nRun Estimate: ${newObj.estimate}\n` + 
-                                    `Runners: ${runners}\nCommentators: ${comms}\nHost: ${hosts}`.trimStart();
-                   
+                                    `Layout: ${newObj.layout}\nRunners: ${runners}\nCommentators: ${comms}\nHost: ${hosts}`.trimStart();
+                
                     console.log(`\nRun Info for ${newObj.name}:`)
                     console.log(newMessage);
 
@@ -188,4 +198,5 @@ module.exports = {
             await interaction.reply('Not authorized to run this command!');
         }
     }
+    //}
 }
