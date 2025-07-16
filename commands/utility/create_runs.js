@@ -27,9 +27,8 @@ module.exports = {
             .setRequired(false))
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels),
     async execute(interaction) {
-        // let userID = interaction.user.id;
-        if (interaction.user.id === cubsUserId) {
-        // if (userID.roles.cache.some(role => role.name === 'Moderator')) {
+        let member = interaction.member.guild;
+        if (member.roles.cache.find(role => role.name === 'Moderator')) {
 
             const eventID = interaction.options.getInteger('event');
             const forum = interaction.client.channels.cache.get(interaction.options.getString('channel'));
@@ -43,7 +42,7 @@ module.exports = {
                 //trackerData = //`filepath/${filename}.json`
                 //obj = trackerData.json
             } else {
-                trackerData = await fetch(`https://tracker.preventathon.com/tracker/api/v2/events/${eventID}/runs/`);
+                trackerData = await fetch(`https://tracker.gamesdonequick.com/tracker/api/v2/events/${eventID}/runs/`);
                 obj = await trackerData.json();
             }
             
@@ -159,8 +158,8 @@ module.exports = {
                                     name: newObj.name,
                                     autoArchiveDuration: ThreadAutoArchiveDuration.OneWeek,
                                     message: {
-                                        content: `Communication Thread for ${newObj.name}`
-                                        //embeds: [newEmbed]
+                                        content: `Communication Thread for ${newObj.name}`,
+                                        embeds: [newEmbed]
                                     },
                                     reason: `Run information/discussion for ${newObj.name}`
                             });
@@ -169,45 +168,39 @@ module.exports = {
 
                             //keeping in case we ever need to not use embeds
                             //newThread.send(`Run information for ${newThread.name}:\n${newMessage}`);
-                            newThread.send({embeds: [newEmbed]});
+                            //newThread.send({embeds: [newEmbed]});
 
                             await new Promise(resolve => setTimeout(resolve, 3000));
                         } catch (e) {
                             console.error(e);
                         }
                     } else {
-                        let threadIdNum;
+                        let threadNum;
                         threadIds.forEach((value, key) => {
                             if (key == newObj.name) {
-                                threadIdNum = value;
+                                threadNum = value;
                             }
                         });
                         try {
-                            const changedThreadId = await forum.threads.fetch(threadIdNum);
-
-                            //TODO: FIX THIS LATER PLEASE FOR THE LOVE OF GOD
-                            //crappy hack to store embed ID in the tracker (tags array of the speedrun object) since discord makes it stupidly hard to pull the message ID from a message within a thread
-                            
-                            // const messageId = changedThreadId.messages.fetch(currentRun.tags[0]);
-                            // console.log(`messageId: ${messageId}`)
-                            // messageId.edit({embeds: [newEmbed]});
-
                             //Keeping in case we ever need to not use embeds for some reason
                             //changedThread.send(`Updated run information for ${newObj.name}:\n${newMessage}`);
-                            changedThreadId.send({embeds: [newEmbed]});
+                            // changedThreadId.send({embeds: [newEmbed]});
+
+                            const changedThread = await forum.threads.fetch(threadNum);
+                            let threadInitMsg = await changedThread.fetchStarterMessage();
+                            await threadInitMsg.edit({embeds: [newEmbed]});
+
                             console.log(`Updated embed in thread: ${newObj.name}`);
-                            await new Promise(resolve => setTimeout(resolve, 3000));
-                            
+                            await interaction.reply('Runs for event #' + eventID + ' pulled!');
+                            await new Promise(resolve => setTimeout(resolve, 1000));
                         } catch (e) {
                             console.error(e);
                         }
                     }
                 }
             }
-            await interaction.reply('Runs for event #' + eventID + ' pulled!');
         } else {
             await interaction.reply('Not authorized to run this command!');
         }
     }
-    //}
 }
