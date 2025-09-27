@@ -42,7 +42,7 @@ module.exports = {
                 //trackerData = //`filepath/${filename}.json`
                 //obj = trackerData.json
             } else {
-                trackerData = await fetch(`https://tracker.gamesdonequick.com/tracker/api/v2/events/${eventID}/runs/`);
+                trackerData = await fetch(`https://tracker.preventathon.com/tracker/api/v2/events/${eventID}/runs/`);
                 obj = await trackerData.json();
             }
             
