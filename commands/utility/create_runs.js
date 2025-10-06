@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, PermissionFlagsBits, ThreadAutoArchiveDuration, EmbedBuilder } = require('discord.js');
-const { cubsUserId } = require('../../config.json');
+const fs = require('fs');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -23,7 +23,7 @@ module.exports = {
     .addStringOption(option => 
         option
             .setName('filename')
-            .setDescription('file to pull from (do not include json extension)')
+            .setDescription('file must be present in the backup runs directory. do not include json extension')
             .setRequired(false))
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels),
     async execute(interaction) {
@@ -39,13 +39,13 @@ module.exports = {
 
             let trackerData, obj;
             if (fromFile === true) {
-                //trackerData = //`filepath/${filename}.json`
-                //obj = trackerData.json
+                trackerData = fs.readFileSync(`./backup_runs/${fileName}.json`);
+                obj = JSON.parse(trackerData);
             } else {
                 trackerData = await fetch(`https://tracker.preventathon.com/tracker/api/v2/events/${eventID}/runs/`);
                 obj = await trackerData.json();
             }
-            
+
             threadList.threads.forEach((value, key) => {
                 threadIds.set(value.name, key); 
             });
@@ -139,8 +139,13 @@ module.exports = {
                         }
                     }
 
+                    let techNotes = "";
+                    if (currentRun.priority_tag == "flashing_lights") {
+                        techNotes = "FLASHING LIGHTS WARNING NEEDED"
+                    }
+
                     const newMessage = `Game: ${newObj.name}\nCategory: ${newObj.category}\nPlatform: ${newObj.console}\nRun Estimate: ${newObj.estimate}\n` + 
-                                    `Layout: ${newObj.layout}\nRunners: ${runners}\nCommentators: ${comms}\nHost: ${hosts}`.trimStart();
+                                    `Layout: ${newObj.layout}\nRunners: ${runners}\nCommentators: ${comms}\nHost: ${hosts}\n\nTech Notes: ${techNotes}`.trimStart();
                 
                     console.log(`\nRun Info for ${newObj.name}:`)
                     console.log(newMessage);
