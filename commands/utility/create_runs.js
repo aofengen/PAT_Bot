@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, PermissionFlagsBits, ThreadAutoArchiveDuration, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits, ThreadAutoArchiveDuration, EmbedBuilder, ChannelType } = require('discord.js');
 const fs = require('fs');
 
 module.exports = {
@@ -10,10 +10,11 @@ module.exports = {
             .setName('event')
             .setDescription('Pull runs from this event ID')
             .setRequired(true))
-    .addStringOption(option =>
+    .addChannelOption(option =>
         option
             .setName('channel')
             .setDescription('Channel ID number where threads will be created')
+            .addChannelTypes(ChannelType.GuildForum)
             .setRequired(true))
     .addBooleanOption(option =>
         option
@@ -31,7 +32,7 @@ module.exports = {
         if (member.roles.cache.find(role => role.name === 'Moderator')) {
 
             const eventID = interaction.options.getInteger('event');
-            const forum = interaction.client.channels.cache.get(interaction.options.getString('channel'));
+            const forum = interaction.options.getChannel('channel');
             const fromFile = interaction.options.getBoolean('fromfile');
             const threadList = await forum.threads.fetchActive();
             const threadIds = new Map();
