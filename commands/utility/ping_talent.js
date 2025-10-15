@@ -85,7 +85,6 @@ module.exports = {
 
             try {
                 const liveChannel = interaction.client.channels.cache.find(channel => channel.name === 'tech-department');
-                //const liveChannel = interaction.client.channels.cache.get('1254852170877112412');
                 const message = peopleToPing + msg;
                 
                 console.log(message);
