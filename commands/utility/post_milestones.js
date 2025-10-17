@@ -15,11 +15,11 @@ export async function execute(interaction) {
         const eventID = interaction.options.getInteger('event');
 
         const trackerData = await fetch(`https://tracker.preventathon.com/tracker/api/v2/events/${eventID}/milestones/`);
-        const data = await trackerData.json();
+        const miData = await trackerData.json();
 
         let milestoneArray = new Array();
-        for (let i = 0; i < data.count; i++) {
-            let cM = data.results[i];
+        for (let i = 0; i < miData.count; i++) {
+            let cM = miData.results[i];
             let id = cM.id;
             let option = new SelectMenuOptionBuilder()
                 .setLabel(cM.name)
@@ -48,32 +48,27 @@ export async function execute(interaction) {
         const milestoneFilter = (interaction) => interaction.customId === 'milestones'; 
         const milestoneCollector = response.resource.message.createMessageComponentCollector({ filter: milestoneFilter, componentType: ComponentType.StringSelect, time: 120_000 });
 
-        let newEmbed;
         milestoneCollector.on('collect', async (i) => {
-            let selectedMilestone = i.values[0];
-            const miBlob = await fetch(`https://tracker.preventathon.com/tracker/api/v2/milestones/${selectedMilestone}`);
-            const miData = await miBlob.json();
+            const selectedMilestone = i.values[0];
+            let selectedData;
 
-            let prevRun = miData.run - 1;
+            for (let j = 0; j < miData.count; j++) { if (selectedMilestone == miData.results[j].id) { selectedData = miData.results[j]; }}
+
+            const prevRun = selectedData.run - 1;
+
             const deadlineBlob = await fetch(`https://tracker.preventathon.com/tracker/api/v2/runs/${prevRun}/`);
             const deadlineData = await deadlineBlob.json();
 
+            console.log(deadlineData.id);
 
-            let miName = miData.name;
-            let miAmount = miData.amount;
-            let miDesc = miData.description ?? 'No Description Provided';
-            let deadline = deadlineData.name;
-
-            console.log(`deadline = ${deadline}`);
-
-            newEmbed = new EmbedBuilder()
-                    .setTitle(miName)
-                    .setDescription(`Milestone Information for ${miName}`)
+            const newEmbed = new EmbedBuilder(deadlineData)
+                    .setTitle(selectedData.name)
+                    .setDescription(`Milestone Information for ${selectedData.name}`)
                     .addFields(
-                        { name: 'Milestone Name: ', value: miName },
-                        { name: 'Total Amount Required: ', value: `$${miAmount}` },
-                        { name: 'Description: ', value: miDesc },
-                        { name: 'Deadline: ', value: `End of ${deadline}` }
+                        { name: 'Milestone Name: ', value: selectedData.name },
+                        { name: 'Total Amount Required: ', value: `$${selectedData.amount}` },
+                        { name: 'Description: ', value: selectedData.description ?? 'No Description Provided' },
+                        { name: 'Deadline: ', value: `End of ${deadlineData.name}` }
                     )
                     .setTimestamp();
 
