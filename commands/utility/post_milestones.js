@@ -63,9 +63,7 @@ export async function execute(interaction) {
 
             const newEmbed = new EmbedBuilder(deadlineData)
                     .setTitle(selectedData.name)
-                    .setDescription(`Milestone Information for ${selectedData.name}`)
                     .addFields(
-                        { name: 'Milestone Name: ', value: selectedData.name },
                         { name: 'Total Amount Required: ', value: `$${selectedData.amount}` },
                         { name: 'Description: ', value: selectedData.description ?? 'No Description Provided' },
                         { name: 'Deadline: ', value: `End of ${deadlineData.name}` }
