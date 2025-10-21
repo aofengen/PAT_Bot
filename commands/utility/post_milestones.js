@@ -75,6 +75,7 @@ export async function execute(interaction) {
         const milestoneCollector = response.resource.message.createMessageComponentCollector({ filter: milestoneFilter, componentType: ComponentType.StringSelect, time: 120_000 });
 
         milestoneCollector.on('collect', async (i) => {
+            await interaction.deleteReply();
             const selectedMilestone = i.values[0];
             let selectedData;
 
@@ -159,7 +160,7 @@ export async function execute(interaction) {
                 )
                 .setTimestamp();
 
-            const secondResponse = await i.reply({ content: 'Verify Milestone Information is Correct:', components: [buttonRow], embeds: [newEmbed], flags: MessageFlags.Ephemeral, withResponse: true });
+            const secondResponse = await i.reply({ content: 'Verify Milestone Information is Correct:', components: [buttonRow], embeds: [newEmbed], withResponse: true });
 
             const collectorFilter = (j) => j.user.id === interaction.user.id;
 
