@@ -4,17 +4,17 @@ import { SlashCommandBuilder, PermissionFlagsBits, ButtonStyle, MessageFlags, Co
 export const data = new SlashCommandBuilder()
     .setName('post_incentives')
     .setDescription('Display bidwar/incentive information in discord.')
-    .addIntegerOption(option => option
-        .setName('event')
-        .setDescription('Pull incentives from this event ID (number only - for PAT6, enter 6, PAT5 enter 5, etc)')
-        .setRequired(true))
+    // .addIntegerOption(option => option
+    //     .setName('event')
+    //     .setDescription('Pull incentives from this event ID (number only - for PAT6, enter 6, PAT5 enter 5, etc)')
+    //     .setRequired(true))
     .setDefaultMemberPermissions(PermissionFlagsBits.ViewChannel);
 export async function execute(interaction) {
     let member = interaction.member.guild;
     if (member.roles.cache.find(role => role.name === 'Moderator' || role.name === 'Producer' || role.name === 'Games Committee')) {
-        const eventID = interaction.options.getInteger('event');
+        // const eventID = interaction.options.getInteger('event');
 
-        const trackerData = await fetch(`https://tracker.preventathon.com/tracker/api/v2/events/${eventID}/bids/?state=OPENED`);
+        const trackerData = await fetch(`https://tracker.preventathon.com/tracker/api/v2/events/6/bids/?state=OPENED`);
         const incData = await trackerData.json();
 
         let incentiveArray = new Array();

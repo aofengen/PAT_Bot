@@ -4,17 +4,17 @@ import { SlashCommandBuilder, PermissionFlagsBits, ButtonStyle, MessageFlags, Co
 export const data = new SlashCommandBuilder()
     .setName('post_milestones')
     .setDescription('Display milestone information in discord.')
-    .addIntegerOption(option => option
-        .setName('event')
-        .setDescription('Pull milestones from this event ID (number only - for PAT6, enter 6, PAT5 enter 5, etc)')
-        .setRequired(true))
+    // .addIntegerOption(option => option
+    //     .setName('event')
+    //     .setDescription('Pull milestones from this event ID (number only - for PAT6, enter 6, PAT5 enter 5, etc)')
+    //     .setRequired(true))
     .setDefaultMemberPermissions(PermissionFlagsBits.ViewChannel);
 export async function execute(interaction) {
     let member = interaction.member.guild;
     if (member.roles.cache.find(role => role.name === 'Moderator' || role.name === 'Producer' || role.name === 'Games Committee')) {
-        const eventID = interaction.options.getInteger('event');
+        // const eventID = interaction.options.getInteger('event');
 
-        const trackerData = await fetch(`https://tracker.preventathon.com/tracker/api/v2/events/${eventID}/milestones/`);
+        const trackerData = await fetch(`https://tracker.preventathon.com/tracker/api/v2/events/6/milestones/`);
         const miData = await trackerData.json();
 
         let milestoneArray = new Array();
