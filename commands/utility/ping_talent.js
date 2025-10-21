@@ -106,6 +106,7 @@ export async function execute(interaction) {
         const talentCollector = response.resource.message.createMessageComponentCollector({ talentFilter, componentType: ComponentType.UserSelect, time: 120_000 });
         const buttonAction = response.resource.message.awaitMessageComponent({ filter: collectorFilter, time: 120_000 });
 
+        
         attemptCollector.on('collect', async (i) => {
             attemptValue = i.values[0];
             const selectMsg = await i.reply({ content: `Selected ${attemptValue}`, flags: MessageFlags.Ephemeral });
@@ -117,21 +118,21 @@ export async function execute(interaction) {
             await selectMsg.delete();
         });
         talentCollector.on('collect', async (i) => {
-            console.log(i);
-            for (let user in i.users) {
+            console.log(i.values);
+            for (let user  of i.values) {
                 talentArray.push(user);
                 await i.reply({ content: `Selected ${user}`, flags: MessageFlags.Ephemeral });
             }
         });
 
-
+        if (buttonAction.customId === 'submitTalentToPing') {
         // const runner1Obj = interaction.options.getUser('runner1') ?? null;
         // const runner2Obj = interaction.options.getUser('runner2') ?? null;
         // const com1Obj = interaction.options.getUser('com1') ?? null;
         // const com2Obj = interaction.options.getUser('com2') ?? null;
         // const com3Obj = interaction.options.getUser('com3') ?? null;
         // const hostObj = interaction.options.getUser('host') ?? null;
-        if (buttonAction.customId === 'submitTalentToPing') {
+        
             let msg;
 
             switch (attemptValue) {
@@ -150,8 +151,10 @@ export async function execute(interaction) {
 
             let peopleToPing = ``;
 
-            for (let talent in talentArray) {
-                peopleToPing += `${talent} `;
+            if (!talentArray.length === 0) {
+                for (let talent in talentArray) {
+                    peopleToPing += `${talent} `;
+                }
             }
 
             // if (runner1Obj != null) {peopleToPing += `${runner1Obj} `};
@@ -161,7 +164,7 @@ export async function execute(interaction) {
             // if (com3Obj != null) {peopleToPing += `${com3Obj} `};
             // if (hostObj != null) {peopleToPing += `${hostObj} `};
             try {
-                const liveChannel = interaction.client.channels.cache.find(channel => channel.name === 'tech-department');
+                const liveChannel = interaction.client.channels.cache.find(channel => channel.name === 'dev-testing');
                 const message = peopleToPing + msg;
 
                 console.log(message);
