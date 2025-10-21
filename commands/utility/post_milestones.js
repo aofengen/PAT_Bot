@@ -81,7 +81,7 @@ export async function execute(interaction) {
 
                 if (confirmation.customId === 'confirm') {
                     const liveChannel = interaction.client.channels.cache.find(channel => channel.name === 'dev-testing');
-                    liveChannel.send({ content: 'NEW MILESTONE INFORMATION!!!', embeds: [newEmbed] });
+                    liveChannel.send({ content: 'NEW MILESTONE INFORMATION!!!', embeds: [newEmbed] }).then(message => message.pin());
 
                     await i.editReply({ content: `New milestone announced and pinned in live-production.`, components: [], embeds: [], flags: MessageFlags.Ephemeral });
                 } else if (confirmation.customId === 'cancel') {

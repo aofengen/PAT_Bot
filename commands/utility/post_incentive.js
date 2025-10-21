@@ -79,8 +79,7 @@ export async function execute(interaction) {
                     { name: 'Accepted Options: ', value: `Top ${selectedData.accepted_number}`}
                 )
             }
-            console.log (newEmbed);
-
+            
             const secondResponse = await i.reply({ content: 'Verify Incentive Information is Correct:', components: [buttonRow], embeds: [newEmbed], withResponse: true });
 
             const collectorFilter = (j) => j.user.id === interaction.user.id;
@@ -90,7 +89,7 @@ export async function execute(interaction) {
 
                 if (confirmation.customId === 'confirm') {
                     const liveChannel = interaction.client.channels.cache.find(channel => channel.name === 'dev-testing');
-                    liveChannel.send({ content: 'NEW INCENTIVE INFORMATION!!!', embeds: [newEmbed] });
+                    liveChannel.send({ content: 'NEW INCENTIVE INFORMATION!!!', embeds: [newEmbed] }).then(message => message.pin());
 
                     await i.editReply({ content: `New incentive announced and pinned in live-production.`, components: [], embeds: [], flags: MessageFlags.Ephemeral });
                 } else if (confirmation.customId === 'cancel') {
