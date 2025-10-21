@@ -12,7 +12,7 @@
     "url": "git+https://github.com/aofengen/PAT_Bot.git"
   },
   "author": "Cubsrule21",
-  "license": "ISC",
+  "license": "BSD-3-Clause",
   "dependencies": {
     "discord.js": "^14.19.3"
   }
