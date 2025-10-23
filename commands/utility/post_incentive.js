@@ -5,7 +5,7 @@ import { SlashCommandBuilder, PermissionFlagsBits, ButtonStyle, MessageFlags, Co
 // CONFIGURATION
 // ============================================================================
 // Set the name of the channel where milestone announcements will be posted
-const OUTPUT_CHANNEL = 'dev-testing';
+const OUTPUT_CHANNEL = isProd ? 'pat6-live-production' : 'dev-testing';
 // Set the tracker eventID for this marathon
 const eventID = 6;
 // ============================================================================

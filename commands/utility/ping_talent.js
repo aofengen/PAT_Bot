@@ -5,7 +5,7 @@ import { StringSelectMenuBuilder, StringSelectMenuOptionBuilder, ChannelSelectMe
 // CONFIGURATION
 // ============================================================================
 // Set the name of the channel where talent pings will be posted
-const OUTPUT_CHANNEL = 'dev-test';
+const OUTPUT_CHANNEL = isProd ? 'pat6-live-production' : 'dev-testing';
 // ============================================================================
 
 export const data = new SlashCommandBuilder()
