@@ -1,11 +1,12 @@
 import { SlashCommandBuilder, PermissionFlagsBits, ChannelType, MessageFlags,  ButtonStyle, ComponentType } from 'discord.js';
 import { StringSelectMenuBuilder, StringSelectMenuOptionBuilder, ChannelSelectMenuBuilder, MentionableSelectMenuBuilder, ActionRowBuilder, ButtonBuilder } from '@discordjs/builders';
+import * as config from '../../config.json' with { type: "json" };
 
 // ============================================================================
 // CONFIGURATION
 // ============================================================================
 // Set the name of the channel where talent pings will be posted
-const OUTPUT_CHANNEL = isProd ? 'pat6-live-production' : 'dev-testing';
+const OUTPUT_CHANNEL = config.isProd ? 'pat6-live-production' : 'dev-testing';
 // ============================================================================
 
 export const data = new SlashCommandBuilder()
@@ -68,7 +69,7 @@ export async function execute(interaction) {
         let attemptValue, channelObj;
         let talentArray = new Array();
 
-        const attemptCollector = response.resource.message.createMessageComponentCollector({ componentType: ComponentType.StringSelect, time: 120_000 });
+        const attemptCollector = response.resource.message.createMessageComponentCollector({ attemptFilter, componentType: ComponentType.StringSelect, time: 120_000 });
         const vcCollector = response.resource.message.createMessageComponentCollector({ vcFilter, componentType: ComponentType.ChannelSelect, time: 120_000 });
         const talentCollector = response.resource.message.createMessageComponentCollector({ talentFilter, componentType: ComponentType.MentionableSelect, time: 120_000 });
 
@@ -95,13 +96,13 @@ export async function execute(interaction) {
 
                 switch (attemptValue) {
                     case 'first':
-                        msg = `Hello! Please join the <#${channelObj.id}> to start setup for the next run!`;
+                        msg = `Hello! Please join the ${channelObj.url} to start setup for the next run!`;
                         break;
                     case 'second':
-                        msg = `Second ping for run setup. Please join <#${channelObj.id}>!`;
+                        msg = `Second ping for run setup. Please join ${channelObj.url}!`;
                         break;
                     case 'third':
-                        msg = `Final ping for run setup. You are needed in <#${channelObj.id}> ASAP!!!`;
+                        msg = `Final ping for run setup. You are needed in ${channelObj.url} ASAP!!!`;
                         break;
                     default:
                         throw new Error("Invalid option for pingAttempt");
