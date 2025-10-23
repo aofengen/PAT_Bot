@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, PermissionFlagsBits, ThreadAutoArchiveDuration, EmbedBuilder, ChannelType } from 'discord.js';
+import { SlashCommandBuilder, PermissionFlagsBits, ThreadAutoArchiveDuration, EmbedBuilder, ChannelType, MessageFlags } from 'discord.js';
 import { readFileSync } from 'node:fs';
 
 export const data = new SlashCommandBuilder()
@@ -10,7 +10,7 @@ export const data = new SlashCommandBuilder()
         .setRequired(true))
     .addChannelOption(option => option
         .setName('channel')
-        .setDescription('Channel ID number where threads will be created')
+        .setDescription('Channel where threads will be created')
         .addChannelTypes(ChannelType.GuildForum)
         .setRequired(true))
     .addBooleanOption(option => option
@@ -202,6 +202,6 @@ export async function execute(interaction) {
             }
         }
     } else {
-        await interaction.reply('Not authorized to run this command!');
+        await interaction.reply({ content: 'Not authorized to run this command!', flags: MessageFlags.Ephemeral });
     }
 }
