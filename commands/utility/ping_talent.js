@@ -1,53 +1,20 @@
 import { SlashCommandBuilder, PermissionFlagsBits, ChannelType, MessageFlags,  ButtonStyle, ComponentType } from 'discord.js';
 import { StringSelectMenuBuilder, StringSelectMenuOptionBuilder, ChannelSelectMenuBuilder, MentionableSelectMenuBuilder, ActionRowBuilder, ButtonBuilder } from '@discordjs/builders';
 
+// ============================================================================
+// CONFIGURATION
+// ============================================================================
+// Set the name of the channel where talent pings will be posted
+const OUTPUT_CHANNEL = 'dev-test';
+// ============================================================================
+
 export const data = new SlashCommandBuilder()
     .setName('ping_talent')
     .setDescription('Ping those involved in the next run.')
-    // .addStringOption(option =>
-    //     option
-    //         .setName('pingattempt')
-    //         .setDescription('Which Ping Attempt? (Valid Options: first, second, or third)')
-    //         .setRequired(true))
-    // .addChannelOption(option =>
-    //     option
-    //         .setName('channel')
-    //         .setDescription('Select Voice Channel')
-    //         .addChannelTypes(ChannelType.GuildVoice)
-    //         .setRequired(true))
-    // .addUserOption(option =>
-    //     option
-    //         .setName('runner1')
-    //         .setDescription('Optional: Enter name of runner here')
-    //         .setRequired(false))
-    // .addUserOption(option =>
-    //     option
-    //         .setName('runner2')
-    //         .setDescription('Optional: Enter name of second runner here')
-    //         .setRequired(false))
-    // .addUserOption(option =>
-    //     option
-    //         .setName('com1')
-    //         .setDescription('Optional: Enter name of first commentator here')
-    //         .setRequired(false))
-    // .addUserOption(option =>
-    //     option
-    //         .setName('com2')
-    //         .setDescription('Optional: Enter name of second commentator here')
-    //         .setRequired(false))
-    // .addUserOption(option =>
-    //     option
-    //         .setName('com3')
-    //         .setDescription('Optional: Enter name of third commentator here')
-    //         .setRequired(false))
-    // .addUserOption(option =>
-    //     option
-    //         .setName('host')
-    //         .setDescription('Optional: If host swap, enter name here')
-    //         .setRequired(false))
     .setDefaultMemberPermissions(PermissionFlagsBits.ViewChannel);
+
 export async function execute(interaction) {
-    let member = interaction.member.guild;
+    let member = interaction.member;
     if (member.roles.cache.find(role => role.name === 'Moderator' || role.name === 'Producer' || role.name === 'Setup')) {
         const attemptSelect = new StringSelectMenuBuilder()
             .setCustomId('pingattempt')
@@ -103,78 +70,84 @@ export async function execute(interaction) {
 
         const attemptCollector = response.resource.message.createMessageComponentCollector({ componentType: ComponentType.StringSelect, time: 120_000 });
         const vcCollector = response.resource.message.createMessageComponentCollector({ vcFilter, componentType: ComponentType.ChannelSelect, time: 120_000 });
-        const talentCollector = response.resource.message.createMessageComponentCollector({ talentFilter, componentType: ComponentType.UserSelect, time: 120_000 });
-        const buttonAction = response.resource.message.awaitMessageComponent({ filter: collectorFilter, time: 120_000 });
+        const talentCollector = response.resource.message.createMessageComponentCollector({ talentFilter, componentType: ComponentType.MentionableSelect, time: 120_000 });
 
-        
         attemptCollector.on('collect', async (i) => {
             attemptValue = i.values[0];
-            const selectMsg = await i.reply({ content: `Selected ${attemptValue}`, flags: MessageFlags.Ephemeral });
-            await selectMsg.delete();
+            await i.deferUpdate();
         });
-        vcCollector.on('collect', async (i) => {
-            channelObj = i.values[0];
-            const selectMsg = await i.reply({ content: `Selected ${channelObj}`, flags: MessageFlags.Ephemeral });
-            await selectMsg.delete();
-        });
-        talentCollector.on('collect', async (i) => {
-            console.log(i.values);
-            for (let user  of i.values) {
-                talentArray.push(user);
-                await i.reply({ content: `Selected ${user}`, flags: MessageFlags.Ephemeral });
-            }
-        });
-
-        if (buttonAction.customId === 'submitTalentToPing') {
-        // const runner1Obj = interaction.options.getUser('runner1') ?? null;
-        // const runner2Obj = interaction.options.getUser('runner2') ?? null;
-        // const com1Obj = interaction.options.getUser('com1') ?? null;
-        // const com2Obj = interaction.options.getUser('com2') ?? null;
-        // const com3Obj = interaction.options.getUser('com3') ?? null;
-        // const hostObj = interaction.options.getUser('host') ?? null;
         
-            let msg;
+        vcCollector.on('collect', async (i) => {
+            channelObj = i.channels.first();
+            await i.deferUpdate();
+        });
+        
+        talentCollector.on('collect', async (i) => {
+            talentArray = Array.from(i.values);
+            await i.deferUpdate();
+        });
 
-            switch (attemptValue) {
-                case 'first':
-                    msg = `Hello! Please join the ${channelObj.url} to start setup for the next run!`;
-                    break;
-                case 'second':
-                    msg = `Second ping for run setup. Please join ${channelObj.url}!`;
-                    break;
-                case 'third':
-                    msg = `Final ping for run setup. You are needed in ${channelObj.url} ASAP!!!`;
-                    break;
-                default:
-                    throw new Error("Invalid option for pingAttempt");
-            }
+        try {
+            const buttonPress = await response.resource.message.awaitMessageComponent({ filter: collectorFilter, componentType: ComponentType.Button, time: 120_000 });
 
-            let peopleToPing = ``;
+            if (buttonPress.customId === 'submitTalentToPing') {
+                let msg;
 
-            if (!talentArray.length === 0) {
-                for (let talent in talentArray) {
-                    peopleToPing += `${talent} `;
+                switch (attemptValue) {
+                    case 'first':
+                        msg = `Hello! Please join the <#${channelObj.id}> to start setup for the next run!`;
+                        break;
+                    case 'second':
+                        msg = `Second ping for run setup. Please join <#${channelObj.id}>!`;
+                        break;
+                    case 'third':
+                        msg = `Final ping for run setup. You are needed in <#${channelObj.id}> ASAP!!!`;
+                        break;
+                    default:
+                        throw new Error("Invalid option for pingAttempt");
                 }
-            }
 
-            // if (runner1Obj != null) {peopleToPing += `${runner1Obj} `};
-            // if (runner2Obj != null) {peopleToPing += `${runner2Obj} `};
-            // if (com1Obj != null) {peopleToPing += `${com1Obj} `};
-            // if (com2Obj != null) {peopleToPing += `${com2Obj} `};
-            // if (com3Obj != null) {peopleToPing += `${com3Obj} `};
-            // if (hostObj != null) {peopleToPing += `${hostObj} `};
-            try {
-                const liveChannel = interaction.client.channels.cache.find(channel => channel.name === 'dev-testing');
+                let peopleToPing = ``;
+
+                for (let talent of talentArray) {
+                    peopleToPing += `<@${talent}> `;
+                }
+                
+                const liveChannel = interaction.client.channels.cache.find(channel => channel.name === OUTPUT_CHANNEL);
+                
+                if (!liveChannel) {
+                    return await buttonPress.update({
+                        content: `Error: Could not find target channel (${OUTPUT_CHANNEL}).`,
+                        components: [],
+                        flags: MessageFlags.Ephemeral
+                    });
+                }
+                
                 const message = peopleToPing + msg;
 
                 console.log(message);
-                liveChannel.send({ content: message, allowed_mentions: true });
-                await interaction.reply({ content: `Talent for next run pinged for the ${attemptValue} time.`, flags: MessageFlags.Ephemeral });
-            } catch (e) {
-                console.error(e);
+                await liveChannel.send({ content: message });
+                await buttonPress.update({ content: `Talent for next run pinged for the ${attemptValue} time.`, components: [], flags: MessageFlags.Ephemeral });
+            }
+        } catch (awaitError) {
+            // Catch the timeout error from awaitMessageComponent
+            if (awaitError.code === 'InteractionCollectorError') {
+                console.log(`[ping_talent] Interaction timed out after 2 minutes for user ${interaction.user.tag}`);
+            } else {
+                console.error(`[ping_talent] Error waiting for button press:`, awaitError);
+            }
+            
+            try {
+                await interaction.editReply({ 
+                    content: 'Interaction timed out or an error occurred.', 
+                    components: [], 
+                    flags: MessageFlags.Ephemeral 
+                });
+            } catch (editError) {
+                console.error(`[ping_talent] Could not edit reply:`, editError.message);
             }
         }
     } else {
-        await interaction.reply('Not authorized to run this command!');
+        await interaction.reply({ content: 'Not authorized to run this command!', flags: MessageFlags.Ephemeral });
     }
 }
