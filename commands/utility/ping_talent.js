@@ -1,12 +1,12 @@
 import { SlashCommandBuilder, PermissionFlagsBits, ChannelType, MessageFlags,  ButtonStyle, ComponentType } from 'discord.js';
 import { StringSelectMenuBuilder, StringSelectMenuOptionBuilder, ChannelSelectMenuBuilder, MentionableSelectMenuBuilder, ActionRowBuilder, ButtonBuilder } from '@discordjs/builders';
-import * as config from '../../config.json' with { type: "json" };
+import * as configModule from '../../config.json' with { type: "json" };
 
 // ============================================================================
 // CONFIGURATION
 // ============================================================================
 // Set the name of the channel where talent pings will be posted
-const OUTPUT_CHANNEL = config.isProd ? 'pat6-live-production' : 'dev-testing';
+const OUTPUT_CHANNEL = configModule.default.config.isProd ? 'pat6-live-production' : 'dev-testing';
 // ============================================================================
 
 export const data = new SlashCommandBuilder()
