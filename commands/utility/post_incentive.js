@@ -72,7 +72,7 @@ export async function execute(interaction) {
             withResponse: true
         });
 
-        const incentiveFilter = (interaction) => interaction.customId === 'incentives'; 
+        const incentiveFilter = (interaction) => interaction.customId === 'incentives';
         const incentiveCollector = response.resource.message.createMessageComponentCollector({ filter: incentiveFilter, componentType: ComponentType.StringSelect, time: 120_000 });
 
         incentiveCollector.on('collect', async (i) => {
@@ -80,16 +80,17 @@ export async function execute(interaction) {
             const selectedIncentive = i.values[0];
             let selectedData;
 
-            for (let j = 0; j < incData.count; j++) { 
-                if (selectedIncentive == incData.results[j].id) 
-                { 
-                    selectedData = incData.results[j]; 
+            for (let j = 0; j < incData.count; j++) {
+                if (selectedIncentive == incData.results[j].id)
+                {
+                    selectedData = incData.results[j];
                 }
             }
 
             let newEmbed = new EmbedBuilder()
                     .setTitle(`${selectedData.full_name}`)
-                    .addFields(
+                    .setColor(0x2E71CC)
+		    .addFields(
                         { name: 'Deadline: ', value: selectedData.close_at ?? 'End of Run' },
                         { name: 'Description: ', value: selectedData.description ?? 'No Description Provided' },
                     )
@@ -98,23 +99,23 @@ export async function execute(interaction) {
             if (selectedData.bid_type === 'challenge') {
                 newEmbed.addFields({ name: 'Total Amount Required: ', value: `$${selectedData.goal}` });
             } else if (selectedData.bid_type === 'choice') {
-                let options;
+                let options = "";
                 for (let i = 0; i < incData.count; i++) {
                     if (incData.results[i].parent == selectedIncentive) {
                         options += `${incData.results[i].name}\n`
                     }
                 }
                 newEmbed.addFields(
-                    { name: 'Options: ', value: options ?? 'Donators will submit. Check total watch page for submissions.'},
+                    { name: 'Options: ', value: options || 'Donators will submit. Check total watch page for submissions.'}, 
                     { name: 'Accepted Options: ', value: `Top ${selectedData.accepted_number}`}
                 )
             }
-            
+
             const secondResponse = await i.reply({ content: 'Verify Incentive Information is Correct:', components: [buttonRow], embeds: [newEmbed], withResponse: true });
             const collectorFilter = (j) => j.user.id === interaction.user.id;
 
             try {
-                const confirmation = await secondResponse.resource.message.awaitMessageComponent({ filter: collectorFilter, time: 120_000 });    
+                const confirmation = await secondResponse.resource.message.awaitMessageComponent({ filter: collectorFilter, time: 120_000 });
 
                 if (confirmation.customId === 'confirm') {
                     const liveChannel = interaction.client.channels.cache.find(channel => channel.name === OUTPUT_CHANNEL);
