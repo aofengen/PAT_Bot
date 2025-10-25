@@ -1,12 +1,12 @@
 import { ActionRowBuilder, ButtonBuilder, EmbedBuilder, SelectMenuOptionBuilder, StringSelectMenuBuilder } from "@discordjs/builders";
 import { SlashCommandBuilder, PermissionFlagsBits, ButtonStyle, MessageFlags, ComponentType } from "discord.js";
-import * as config from '../../config.json' with { type: "json" };
+import * as configModule from '../../config.json' with { type: "json" };
 
 // ============================================================================
 // CONFIGURATION
 // ============================================================================
 // Set the name of the channel where milestone announcements will be posted
-const OUTPUT_CHANNEL = config.isProd ? 'pat6-live-production' : 'dev-testing';
+const OUTPUT_CHANNEL = configModule.default.config.isProd ? 'pat6-live-production' : 'dev-testing';
 // Set the tracker eventID for this marathon
 const eventID = 6;
 // ============================================================================
