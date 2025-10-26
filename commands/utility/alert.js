@@ -3,11 +3,17 @@ import { PermissionFlagsBits, SlashCommandBuilder, MessageFlags } from "discord.
 export const data = new SlashCommandBuilder()
     .setName('alert')
     .setDescription('Ping Safety Staff for any reason.')
+    .addStringOption(option => option
+        .setName('reason')
+        .setDescription('OPTIONAL: Reason for report')
+        .setRequired(false)
+    )
     .setDefaultMemberPermissions(PermissionFlagsBits.ViewChannel);
 
 export async function execute(interaction) {
     const safetyChannel = interaction.client.channels.cache.find(channel => channel.name === 'safety-general');
     const safetyStaffRole = interaction.guild.roles.cache.find(role => role.name === 'Safety Staff');
+    const reason = interaction.options.getString('reason') ?? 'No reason provided.';
 
     if (!safetyChannel) {
         return await i.editReply({
@@ -27,7 +33,7 @@ export async function execute(interaction) {
         });
     }
 
-    await safetyChannel.send({ content: `${safetyStaffRole} attention needed in channel ${interaction.channel}. Report filed by ${interaction.user}.` });
+    await safetyChannel.send({ content: `${safetyStaffRole} attention needed in channel ${interaction.channel}: ${reason}. Report filed by ${interaction.user}.` });
 
     await interaction.reply({ content: 'Safety Staff alerted. Thank you for the report. This message cannot be seen by anyone else.', flags: MessageFlags.Ephemeral });
 }
