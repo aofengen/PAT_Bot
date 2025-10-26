@@ -13,7 +13,7 @@ export const data = new SlashCommandBuilder()
 export async function execute(interaction) {
     const safetyChannel = interaction.client.channels.cache.find(channel => channel.name === 'safety-general');
     const safetyStaffRole = interaction.guild.roles.cache.find(role => role.name === 'Safety Staff');
-    const reason = interaction.options.getString('reason') ?? 'No reason provided.';
+    const reason = interaction.options.getString('reason') ?? 'No reason provided';
 
     if (!safetyChannel) {
         return await i.editReply({
@@ -33,7 +33,7 @@ export async function execute(interaction) {
         });
     }
 
-    await safetyChannel.send({ content: `${safetyStaffRole} attention needed in channel ${interaction.channel}: ${reason}. Report filed by ${interaction.user}.` });
+    await safetyChannel.send({ content: `${safetyStaffRole} attention needed in channel ${interaction.channel}. Report filed by ${interaction.user}. Reason: ${reason} ` });
 
     await interaction.reply({ content: 'Safety Staff alerted. Thank you for the report. This message cannot be seen by anyone else.', flags: MessageFlags.Ephemeral });
 }
