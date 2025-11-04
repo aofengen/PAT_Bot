@@ -99,7 +99,7 @@ export async function execute(interaction) {
                         msg = `Hello! Please join the ${channelObj.url} to start setup for the next run!`;
                         break;
                     case 'second':
-                        msg = `Second ping for run setup. Please join ${channelObj.url}!`;
+                        msg = `Second ping for run setup. Please join ${channelObj.url} now!`;
                         break;
                     case 'third':
                         msg = `Final ping for run setup. You are needed in ${channelObj.url} ASAP!!!`;
