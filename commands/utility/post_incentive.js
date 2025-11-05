@@ -5,7 +5,7 @@ import * as configModule from '../../config.json' with { type: "json" };
 // ============================================================================
 // CONFIGURATION
 // ============================================================================
-// Set the name of the channel where milestone announcements will be posted
+// Set the name of the channel where incentive announcements will be posted
 const OUTPUT_CHANNEL = configModule.default.config.isProd ? 'pat6-live-production' : 'dev-testing';
 // Set the tracker eventID for this marathon
 const eventID = 6;
@@ -28,7 +28,7 @@ export async function execute(interaction) {
 
         if (!trackerData.ok) {
             return await interaction.reply({
-                content: `Failed to fetch milestones for event ${eventID}. Please check the event ID.`,
+                content: `Failed to fetch incentives for event ${eventID}. Please check the event ID.`,
                 flags: MessageFlags.Ephemeral
             });
         }
@@ -37,7 +37,7 @@ export async function execute(interaction) {
 
         if (!incData.results || incData.results.length === 0) {
             return await interaction.reply({
-                content: `No milestones found for event ${eventID}.`,
+                content: `No incentives found for event ${eventID}.`,
                 flags: MessageFlags.Ephemeral
             });
         }
@@ -97,7 +97,7 @@ export async function execute(interaction) {
                     .setTimestamp();
 
             if (selectedData.bid_type === 'challenge') {
-                newEmbed.addFields({ name: 'Total Amount Required: ', value: `$${selectedData.goal}` });
+                newEmbed.addFields({ name: 'Total Amount Required: ', value: `CA$${selectedData.goal}` });
             } else if (selectedData.bid_type === 'choice') {
                 let options = "";
                 for (let i = 0; i < incData.count; i++) {

@@ -155,7 +155,7 @@ export async function execute(interaction) {
                 .setTitle(selectedData.name)
                 .setColor(0x2ECC71)
                 .addFields(
-                    { name: 'Total Amount Required: ', value: `$${selectedData.amount}` },
+                    { name: 'Total Amount Required: ', value: `CA$${selectedData.amount}` },
                     { name: 'Description: ', value: (selectedData.description ?? 'No Description Provided').substring(0, 1024) },
                     { name: 'Deadline: ', value: deadlineText }
                 )
