@@ -6,7 +6,7 @@ import * as configModule from '../../config.json' with { type: "json" };
 // CONFIGURATION
 // ============================================================================
 // Set the name of the channel where milestone announcements will be posted
-const OUTPUT_CHANNEL = configModule.default.config.isProd ? 'pat6-live-production' : 'dev-testing';
+const OUTPUT_CHANNEL = configModule.default.config.isProd ? 'pat7-live-production' : 'dev-testing';
 // Set the tracker eventID for this marathon
 const eventID = 6;
 // ============================================================================

@@ -1,0 +1,229 @@
+{
+    "count": 16,
+    "results": [
+        {
+            "name": "[BACKUP RUN] Kunitsu-Gami: Path of the Goddess",
+            "category": "Otherworldly Venture Normal",
+            "console": "PS5",
+            "run_time": "0:35:00",
+            "layout": "16x9_1P",
+            "runners": [{
+                "name": "Aeshmah",
+                "pronouns": "he/him"
+            }],
+            "hosts": [],
+            "commentators": [],
+            "priority_tag": ""
+        },
+        {
+            "name": "[BACKUP RUN] Lightmatter Anniversary",
+            "category": "All Prototypes",
+            "console": "PC",
+            "run_time": "1:05:00",
+            "layout": "16x9_1P",
+            "runners": [{
+                "name": "auclairdelalyn",
+                "pronouns": "No Pronouns"
+            }],
+            "hosts": [],
+            "commentators": [],
+            "priority_tag": ""
+        },
+        {
+            "name": "[BACKUP RUN] Don't Stop, Girlypop!",
+            "category": "Any% Glitchless",
+            "console": "PC",
+            "run_time": "1:15:00",
+            "layout": "16x9_1P",
+            "runners": [{
+                "name": "danejerus",
+                "pronouns": "he/him"
+            }],
+            "hosts": [],
+            "commentators": [],
+            "priority_tag": ""
+        },
+        {
+            "name": "[BACKUP RUN] Mr. Platformer",
+            "category": "Full Game",
+            "console": "PC",
+            "run_time": "0:17:00",
+            "layout": "16x9_1P",
+            "runners": [{
+                "name": "Heponwana",
+                "pronouns": "he/him"
+            }],
+            "hosts": [],
+            "commentators": [],
+            "priority_tag": ""
+        },
+        {
+            "name": "[BACKUP RUN] Fallout 2",
+            "category": "Any%",
+            "console": "PC",
+            "run_time": "0:20:00",
+            "layout": "4x39_1P",
+            "runners": [{
+                "name": "itzpaige__",
+                "pronouns": "she/her"
+            }],
+            "hosts": [],
+            "commentators": [],
+            "priority_tag": ""
+        },
+        {
+            "name": "[BACKUP RUN] The Legend of Zelda: Ocarina of Time",
+            "category": "Randomizer",
+            "console": "PC",
+            "run_time": "2:45:00",
+            "layout": "16x9_1P",
+            "runners": [{
+                "name": "KetiKat",
+                "pronouns": "she/her"
+            }],
+            "hosts": [],
+            "commentators": [],
+            "priority_tag": ""
+        },
+        {
+            "name": "[BACKUP RUN] Super Metroid: Ascent",
+            "category": "100%",
+            "console": "SNES",
+            "run_time": "1:13:00",
+            "layout": "4x3_1P",
+            "runners": [{
+                "name": "LinkaMeister",
+                "pronouns": "he/him"
+            }],
+            "hosts": [],
+            "commentators": [],
+            "priority_tag": ""
+        },
+        {
+            "name": "[BACKUP RUN] Chō Jikū Yōsai Macross",
+            "category": "ARMD Storyline",
+            "console": "PS2",
+            "run_time": "1:07:00",
+            "layout": "4x3_1P",
+            "runners": [{
+                "name": "Mageius",
+                "pronouns": "any/all"
+            }],
+            "hosts": [],
+            "commentators": [],
+            "priority_tag": ""
+        },
+        {
+            "name": "[BACKUP RUN] MASH VP! Re:VISION",
+            "category": "Showcase",
+            "console": "PC",
+            "run_time": "1:00:00",
+            "layout": "16x9_1P",
+            "runners": [{
+                "name": "MASH",
+                "pronouns": "they/them"
+            }],
+            "hosts": [],
+            "commentators": [],
+            "priority_tag": "flashing_lights"
+        },
+        {
+            "name": "[BACKUP RUN] Scoot Kaboom and the Tomb of Doom",
+            "category": "Any%",
+            "console": "PC",
+            "run_time": "00:22:00",
+            "layout": "16x9_1P",
+            "runners": [{
+                "name": "MsTruffles",
+                "pronouns": "she/her"
+            }],
+            "hosts": [],
+            "commentators": [],
+            "priority_tag": ""
+        },
+        {
+            "name": "[BACKUP RUN] Secret Agent Wizard Boy and the International Crime Syndicate",
+            "category": "All Collectibles (1.1.3)",
+            "console": "PC",
+            "run_time": "0:25:00",
+            "layout": "16x9_1P",
+            "runners": [{
+                "name": "Nerd_Squared",
+                "pronouns": "they/them"
+            }],
+            "hosts": [],
+            "commentators": [],
+            "priority_tag": ""
+        },
+        {
+            "name": "[BACKUP RUN] The Lord of the Rings: The Two Towers",
+            "category": "Aragorn vs Legolas, Easy",
+            "console": "GameCube",
+            "run_time": "1:00:00",
+            "layout": "16x9_1P",
+            "runners": [{
+                "name": "NickRPGreen",
+                "pronouns": "he/him"
+            }],
+            "hosts": [],
+            "commentators": [],
+            "priority_tag": ""
+        },
+        {
+            "name": "[BACKUP RUN] Inazuma Eleven: Victory Road",
+            "category": "Baseball% (Chapter 3 showcase)",
+            "console": "PC",
+            "run_time": "1:20:00",
+            "layout": "16x9_1P",
+            "runners": [{
+                "name": "Starwindx9",
+                "pronouns": "they/them"
+            }],
+            "hosts": [],
+            "commentators": [],
+            "priority_tag": ""
+        },
+        {
+            "name": "[BACKUP RUN] Duck Detective: The Ghost of Glamping",
+            "category": "Any%",
+            "console": "PC",
+            "run_time": "0:26:00",
+            "layout": "16x9_1P",
+            "runners": [{
+                "name": "theemaskedmango",
+                "pronouns": "they/them"
+            }],
+            "hosts": [],
+            "commentators": [],
+            "priority_tag": ""
+        },
+        {
+            "name": "[BACKUP RUN] Bo: Path of the Teal Lotus",
+            "category": "Trial of the Tentaihana",
+            "console": "PC",
+            "run_time": "0:20:00",
+            "layout": "16x9_1P",
+            "runners": [{
+                "name": "TurtleRun2412",
+                "pronouns": "No Pronouns"
+            }],
+            "hosts": [],
+            "commentators": [],
+            "priority_tag": ""
+        },
+        {
+            "name": "[BACKUP RUN] Crash Team Racing Nitro Fueled",
+            "category": "Any%",
+            "console": "Switch 2",
+            "run_time": "1:15:00",
+            "layout": "16x9_1P",
+            "runners": [{
+                "name": "Virtual QSO",
+                "pronouns": "he/him"
+            }],
+            "hosts": [],
+            "commentators": [],
+            "priority_tag": ""
+        }
+    ]
+}
