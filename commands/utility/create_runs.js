@@ -137,7 +137,7 @@ export async function execute(interaction) {
 
                 //TODO - get tech notes field from private tracker API (look into DRF Knox)
                 let techNotes = "";
-                if (currentRun.name == "MASH VP! Re:VISION") {
+                if (currentRun.name == "[BACKUP RUN] MASH VP! Re:VISION") {
                     techNotes = "FLASHING LIGHTS WARNING NEEDED, no cam for runner";
                 } else if (currentRun.priority_tag == "flashing_lights") {
                     techNotes = "FLASHING LIGHTS WARNING NEEDED";
