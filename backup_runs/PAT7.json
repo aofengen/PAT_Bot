@@ -27,7 +27,7 @@
             }],
             "hosts": [],
             "commentators": [],
-            "priority_tag": ""
+            "priority_tag": "flashing_lights"
         },
         {
             "name": "[BACKUP RUN] Don't Stop, Girlypop!",
@@ -41,7 +41,7 @@
             }],
             "hosts": [],
             "commentators": [],
-            "priority_tag": ""
+            "priority_tag": "flashing_lights"
         },
         {
             "name": "[BACKUP RUN] Mr. Platformer",
@@ -153,7 +153,7 @@
             }],
             "hosts": [],
             "commentators": [],
-            "priority_tag": ""
+            "priority_tag": "flashing_lights"
         },
         {
             "name": "[BACKUP RUN] The Lord of the Rings: The Two Towers",
@@ -171,7 +171,7 @@
         },
         {
             "name": "[BACKUP RUN] Inazuma Eleven: Victory Road",
-            "category": "Baseball% (Chapter 3 showcase)",
+            "category": "Baseball% (Chapter 3 Showcase)",
             "console": "PC",
             "run_time": "1:20:00",
             "layout": "16x9_1P",
