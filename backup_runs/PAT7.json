@@ -1,20 +1,6 @@
 {
-    "count": 16,
+    "count": 15,
     "results": [
-        {
-            "name": "[BACKUP RUN] Kunitsu-Gami: Path of the Goddess",
-            "category": "Otherworldly Venture Normal",
-            "console": "PS5",
-            "run_time": "0:35:00",
-            "layout": "16x9_1P",
-            "runners": [{
-                "name": "Aeshmah",
-                "pronouns": "he/him"
-            }],
-            "hosts": [],
-            "commentators": [],
-            "priority_tag": ""
-        },
         {
             "name": "[BACKUP RUN] Lightmatter Anniversary",
             "category": "All Prototypes",
