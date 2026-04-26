@@ -51,7 +51,7 @@
             "category": "Any%",
             "console": "PC",
             "run_time": "0:20:00",
-            "layout": "4x39_1P",
+            "layout": "16x9_1P",
             "runners": [{
                 "name": "itzpaige__",
                 "pronouns": "she/her"
@@ -189,7 +189,10 @@
                 "pronouns": "they/them"
             }],
             "hosts": [],
-            "commentators": [],
+            "commentators": [{
+                "name": "selcouthmind",
+                "pronouns": "she/her"
+            }],
             "priority_tag": ""
         },
         {
