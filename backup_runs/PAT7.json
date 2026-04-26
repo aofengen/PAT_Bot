@@ -26,7 +26,10 @@
                 "pronouns": "he/him"
             }],
             "hosts": [],
-            "commentators": [],
+            "commentators": [{
+                "name": "James Swan",
+                "pronouns": "they/them"
+            }],
             "priority_tag": "flashing_lights"
         },
         {
@@ -124,7 +127,10 @@
                 "pronouns": "she/her"
             }],
             "hosts": [],
-            "commentators": [],
+            "commentators": [{
+                "name": "Laika",
+                "pronouns": "she/her"
+            }],
             "priority_tag": ""
         },
         {
@@ -138,7 +144,10 @@
                 "pronouns": "they/them"
             }],
             "hosts": [],
-            "commentators": [],
+            "commentators": [{
+                "name": "HockeyBabbler",
+                "pronouns": "she/they"
+            }],
             "priority_tag": "flashing_lights"
         },
         {
