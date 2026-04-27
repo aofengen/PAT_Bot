@@ -112,11 +112,11 @@
                 "name": "MASH",
                 "pronouns": "they/them"
             }],
-            "hosts": [{
+            "hosts": [],
+            "commentators": [{
                 "name": "Slammin",
                 "pronouns": "No Pronouns"
             }],
-            "commentators": [],
             "priority_tag": "flashing_lights"
         },
         {
