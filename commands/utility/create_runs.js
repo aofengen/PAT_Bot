@@ -24,7 +24,7 @@ export const data = new SlashCommandBuilder()
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels);
 export async function execute(interaction) {
     let member = interaction.member.guild;
-    if (member.roles.cache.find(role => role.name === 'Moderator')) {
+    if (member.roles.cache.find(role => role.name === 'Staff (Moderator)')) {
 
         const eventID = interaction.options.getInteger('event');
         const forum = interaction.options.getChannel('channel');
