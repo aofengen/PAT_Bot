@@ -23,7 +23,7 @@ export const data = new SlashCommandBuilder()
 export async function execute(interaction) {
     const member = interaction.member;
 
-    if (member.roles.cache.some(role => role.name === 'Moderator' || role.name === 'Producer' || role.name === 'Games Committee')) {
+    if (member.roles.cache.some(role => role.name === 'Staff (Moderator)' || role.name === 'Producer' || role.name === 'Games Committee')) {
         // const eventID = interaction.options.getInteger('event');
 
         const trackerData = await fetch(`https://tracker.preventathon.com/tracker/api/v2/events/${eventID}/milestones/`);

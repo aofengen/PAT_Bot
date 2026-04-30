@@ -21,7 +21,7 @@ export const data = new SlashCommandBuilder()
     .setDefaultMemberPermissions(PermissionFlagsBits.ViewChannel);
 export async function execute(interaction) {
     let member = interaction.member.guild;
-    if (member.roles.cache.find(role => role.name === 'Moderator' || role.name === 'Producer' || role.name === 'Games Committee')) {
+    if (member.roles.cache.find(role => role.name === 'Staff (Moderator)' || role.name === 'Producer' || role.name === 'Games Committee')) {
         // const eventID = interaction.options.getInteger('event');
 
         const trackerData = await fetch(`https://tracker.preventathon.com/tracker/api/v2/events/${eventID}/bids/?state=OPENED`);

@@ -16,7 +16,7 @@ export const data = new SlashCommandBuilder()
 
 export async function execute(interaction) {
     let member = interaction.member;
-    if (member.roles.cache.find(role => role.name === 'Moderator' || role.name === 'Producer' || role.name === 'Setup')) {
+    if (member.roles.cache.find(role => role.name === 'Staff (Moderator)' || role.name === 'Producer' || role.name === 'Setup')) {
         const attemptSelect = new StringSelectMenuBuilder()
             .setCustomId('pingattempt')
             .setPlaceholder('Which ping attempt?')
