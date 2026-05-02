@@ -1,5 +1,6 @@
 import { SlashCommandBuilder, PermissionFlagsBits, ThreadAutoArchiveDuration, EmbedBuilder, ChannelType, MessageFlags } from 'discord.js';
 import { readFileSync } from 'node:fs';
+import * as configModule from '../../config.json' with { type: "json" };
 
 export const data = new SlashCommandBuilder()
     .setName('create_runs')
@@ -38,7 +39,7 @@ export async function execute(interaction) {
             trackerData = readFileSync(`./backup_runs/${fileName}.json`);
             obj = JSON.parse(trackerData);
         } else {
-            trackerData = await fetch(`https://tracker.preventathon.com/tracker/api/v2/events/${eventID}/runs/`);
+            trackerData = await fetch(`${configModule.default.config.baseTrackerUrl}/events/${eventID}/runs/`);
             obj = await trackerData.json();
         }
 
