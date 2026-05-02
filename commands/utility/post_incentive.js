@@ -6,29 +6,23 @@ import * as configModule from '../../config.json' with { type: "json" };
 // CONFIGURATION
 // ============================================================================
 // Set the name of the channel where incentive announcements will be posted
-const OUTPUT_CHANNEL = configModule.default.config.isProd ? 'pat7-live-production' : 'dev-testing';
-// Set the tracker eventID for this marathon
-const eventID = 7;
+const OUTPUT_CHANNEL = configModule.default.config.isProd ? configModule.default.config.prodOutputChannel : configModule.default.config.testOutputChannel;
 // ============================================================================
 
 export const data = new SlashCommandBuilder()
     .setName('post_incentives')
     .setDescription('Display bidwar/incentive information in discord.')
-    // .addIntegerOption(option => option
-    //     .setName('event')
-    //     .setDescription('Pull incentives from this event ID (number only - for PAT6, enter 6, PAT5 enter 5, etc)')
-    //     .setRequired(true))
     .setDefaultMemberPermissions(PermissionFlagsBits.ViewChannel);
 export async function execute(interaction) {
     let member = interaction.member.guild;
     if (member.roles.cache.find(role => role.name === 'Staff (Moderator)' || role.name === 'Producer' || role.name === 'Games Committee')) {
         // const eventID = interaction.options.getInteger('event');
 
-        const trackerData = await fetch(`https://tracker.preventathon.com/tracker/api/v2/events/${eventID}/bids/?state=OPENED`);
+        const trackerData = await fetch(`${configModule.default.config.baseTrackerUrl}/events/${configModule.default.config.eventID}/bids/?state=OPENED`);
 
         if (!trackerData.ok) {
             return await interaction.reply({
-                content: `Failed to fetch incentives for event ${eventID}. Please check the event ID.`,
+                content: `Failed to fetch incentives for event ${configModule.default.config.eventID}. Please check the event ID.`,
                 flags: MessageFlags.Ephemeral
             });
         }
@@ -37,7 +31,7 @@ export async function execute(interaction) {
 
         if (!incData.results || incData.results.length === 0) {
             return await interaction.reply({
-                content: `No incentives found for event ${eventID}.`,
+                content: `No incentives found for event ${configModule.default.config.eventID}.`,
                 flags: MessageFlags.Ephemeral
             });
         }

@@ -6,31 +6,26 @@ import * as configModule from '../../config.json' with { type: "json" };
 // CONFIGURATION
 // ============================================================================
 // Set the name of the channel where milestone announcements will be posted
-const OUTPUT_CHANNEL = configModule.default.config.isProd ? 'pat7-live-production' : 'dev-testing';
+const OUTPUT_CHANNEL = configModule.default.config.isProd ? configModule.default.config.prodOutputChannel : configModule.default.config.testOutputChannel;
 // Set the tracker eventID for this marathon
-const eventID = 7;
+
 // ============================================================================
 
 export const data = new SlashCommandBuilder()
     .setName('post_milestones')
     .setDescription('Display milestone information in discord.')
-    // .addIntegerOption(option => option
-    //     .setName('event')
-    //     .setDescription('Pull milestones from this event ID (number only - for PAT6, enter 6, PAT5 enter 5, etc)')
-    //     .setRequired(true))
     .setDefaultMemberPermissions(PermissionFlagsBits.ViewChannel);
 
 export async function execute(interaction) {
     const member = interaction.member;
 
     if (member.roles.cache.some(role => role.name === 'Staff (Moderator)' || role.name === 'Producer' || role.name === 'Games Committee')) {
-        // const eventID = interaction.options.getInteger('event');
 
-        const trackerData = await fetch(`https://tracker.preventathon.com/tracker/api/v2/events/${eventID}/milestones/`);
+        const trackerData = await fetch(`https://tracker.preventathon.com/tracker/api/v2/events/${configModule.default.config.eventID}/milestones/`);
 
         if (!trackerData.ok) {
             return await interaction.reply({
-                content: `Failed to fetch milestones for event ${eventID}. Please check the event ID.`,
+                content: `Failed to fetch milestones for event ${configModule.default.config.eventID}. Please check the event ID.`,
                 flags: MessageFlags.Ephemeral
             });
         }
@@ -39,7 +34,7 @@ export async function execute(interaction) {
 
         if (!miData.results || miData.results.length === 0) {
             return await interaction.reply({
-                content: `No milestones found for event ${eventID}.`,
+                content: `No milestones found for event ${configModule.default.config.eventID}.`,
                 flags: MessageFlags.Ephemeral
             });
         }
