@@ -49,7 +49,7 @@ export async function execute(interaction) {
                 let id = inc.id;
                 let option = new SelectMenuOptionBuilder()
                     .setLabel(inc.full_name)
-                    .setDescription(inc.bidType)
+                    .setDescription(inc.bid_type)
                     .setValue(id.toString());
                 incentiveArray.push(option);
             }
