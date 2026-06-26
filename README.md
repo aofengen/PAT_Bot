@@ -10,7 +10,11 @@
         "prodOutputChannel": "", //production discord channel to output posts 
         "testOutputChannel": "", //testing production discord channel to output posts
         "baseTrackerUrl": "", //base URL for tracker instance being used
-        "eventID": "" //tracker event ID being used
+        "eventID": "", //tracker event ID being used
+        "staffRole": "", //name of staff role in your server
+        "gcRole": "", //name of Games Committee role in your server
+        "producerRole": "", //name of Producer role in your server
+        "setupRole": //name of setup volunteer role in your server
     }
 }
 ```

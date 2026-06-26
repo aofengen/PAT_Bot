@@ -7,6 +7,9 @@ import * as configModule from '../../config.json' with { type: "json" };
 // ============================================================================
 // Set the name of the channel where milestone announcements will be posted
 const OUTPUT_CHANNEL = configModule.default.config.isProd ? configModule.default.config.prodOutputChannel : configModule.default.config.testOutputChannel;
+const GC_ROLE = configModule.default.config.gcRole;
+const PRODUCER_ROLE = configModule.default.config.producerRole;
+const STAFF_ROLE = configModule.default.config.staffRole;
 // Set the tracker eventID for this marathon
 
 // ============================================================================
@@ -19,7 +22,7 @@ export const data = new SlashCommandBuilder()
 export async function execute(interaction) {
     const member = interaction.member;
 
-    if (member.roles.cache.some(role => role.name === 'Staff (Moderator)' || role.name === 'Producer' || role.name === 'Games Committee')) {
+    if (member.roles.cache.some(role => role.name === STAFF_ROLE || role.name === PRODUCER_ROLE || role.name === GC_ROLE)) {
 
         const trackerData = await fetch(`https://tracker.preventathon.com/tracker/api/v2/events/${configModule.default.config.eventID}/milestones/`);
 

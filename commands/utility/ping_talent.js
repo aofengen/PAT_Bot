@@ -5,8 +5,11 @@ import * as configModule from '../../config.json' with { type: "json" };
 // ============================================================================
 // CONFIGURATION
 // ============================================================================
-// Set the name of the channel where talent pings will be posted
-const OUTPUT_CHANNEL = configModule.default.config.isProd ? 'pat7-live-production' : 'dev-testing';
+// Set the name of the channel where milestone announcements will be posted
+const OUTPUT_CHANNEL = configModule.default.config.isProd ? configModule.default.config.prodOutputChannel : configModule.default.config.testOutputChannel;
+const PRODUCER_ROLE = configModule.default.config.producerRole;
+const SETUP_ROLE = configModule.default.config.setupRole;
+const STAFF_ROLE = configModule.default.config.staffRole;
 // ============================================================================
 
 export const data = new SlashCommandBuilder()
@@ -16,7 +19,7 @@ export const data = new SlashCommandBuilder()
 
 export async function execute(interaction) {
     let member = interaction.member;
-    if (member.roles.cache.find(role => role.name === 'Staff (Moderator)' || role.name === 'Producer' || role.name === 'Setup')) {
+    if (member.roles.cache.some(role => role.name === STAFF_ROLE || role.name === PRODUCER_ROLE || role.name === SETUP_ROLE)) {
         const attemptSelect = new StringSelectMenuBuilder()
             .setCustomId('pingattempt')
             .setPlaceholder('Which ping attempt?')

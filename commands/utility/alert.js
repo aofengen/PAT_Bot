@@ -14,6 +14,8 @@ export async function execute(interaction) {
     const safetyChannel = interaction.client.channels.cache.find(channel => channel.name === 'safety-general');
     const safetyStaffRole = interaction.guild.roles.cache.find(role => role.name === 'Safety Staff');
     const reason = interaction.options.getString('reason') ?? 'No reason provided';
+    const ackBtn = new ButtonBuilder().setCustomId('ack').setLabel('Acknowledge Report').setStyle(ButtonStyle.Danger);
+    const buttonRow = new ActionRowBuilder().addComponents(ackBtn);
 
     if (!safetyChannel) {
         return await i.editReply({
@@ -35,5 +37,13 @@ export async function execute(interaction) {
 
     await safetyChannel.send({ content: `${safetyStaffRole} attention needed in channel ${interaction.channel}. Report filed by ${interaction.user}. Reason: ${reason} ` });
 
+    await safetyChannel.send({ content: `Send reporter acknowledgement of report receipt:`, components: [buttonRow], withResponse: true });
+
     await interaction.reply({ content: 'Safety Staff alerted. Thank you for the report. This message cannot be seen by anyone else.', flags: MessageFlags.Ephemeral });
+
+    try {
+    
+    } catch {
+
+    }
 }

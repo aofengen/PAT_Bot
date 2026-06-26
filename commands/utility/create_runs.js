@@ -2,6 +2,12 @@ import { SlashCommandBuilder, PermissionFlagsBits, ThreadAutoArchiveDuration, Em
 import { readFileSync } from 'node:fs';
 import * as configModule from '../../config.json' with { type: "json" };
 
+// ============================================================================
+// CONFIGURATION
+// ============================================================================
+const STAFF_ROLE = configModule.default.config.staffRole;
+// ============================================================================
+
 export const data = new SlashCommandBuilder()
     .setName('create_runs')
     .setDescription('Creates threads for accepted marathon runs in a forum channel')
@@ -25,7 +31,7 @@ export const data = new SlashCommandBuilder()
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels);
 export async function execute(interaction) {
     let member = interaction.member.guild;
-    if (member.roles.cache.find(role => role.name === 'Staff (Moderator)')) {
+    if (member.roles.cache.find(role => role.name === STAFF_ROLE)) {
 
         const eventID = interaction.options.getInteger('event');
         const forum = interaction.options.getChannel('channel');
