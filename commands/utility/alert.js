@@ -10,9 +10,16 @@ export const data = new SlashCommandBuilder()
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.ViewChannel);
 
+// ============================================================================
+// CONFIGURATION
+// ============================================================================
+const SAFETY_STAFF_CHANNEL = configModule.default.config.safetyStaffChannel;
+const SAFETY_STAFF_ROLE = configModule.default.config.safetyRole;
+// ============================================================================
+
 export async function execute(interaction) {
-    const safetyChannel = interaction.client.channels.cache.find(channel => channel.name === 'safety-general');
-    const safetyStaffRole = interaction.guild.roles.cache.find(role => role.name === 'Safety Staff');
+    const safetyChannel = interaction.client.channels.cache.find(channel => channel.name === SAFETY_STAFF_CHANNEL);
+    const safetyStaffRole = interaction.guild.roles.cache.find(role => role.name === SAFETY_STAFF_ROLE);
     const reason = interaction.options.getString('reason') ?? 'No reason provided';
     const ackBtn = new ButtonBuilder().setCustomId('ack').setLabel('Acknowledge Report').setStyle(ButtonStyle.Danger);
     const buttonRow = new ActionRowBuilder().addComponents(ackBtn);
@@ -35,11 +42,11 @@ export async function execute(interaction) {
         });
     }
 
-    await safetyChannel.send({ content: `${safetyStaffRole} attention needed in channel ${interaction.channel}. Report filed by ${interaction.user}. Reason: ${reason} ` });
+    await safetyChannel.send({ content: `${SAFETY_STAFF_ROLE} attention needed in channel ${interaction.channel}. Report filed by ${interaction.user}. Reason: ${reason} ` });
 
     await safetyChannel.send({ content: `Send reporter acknowledgement of report receipt:`, components: [buttonRow], withResponse: true });
 
-    await interaction.reply({ content: 'Safety Staff alerted. Thank you for the report. This message cannot be seen by anyone else.', flags: MessageFlags.Ephemeral });
+    await interaction.reply({ content: `${SAFETY_STAFF_ROLE} alerted. Thank you for the report. This message cannot be seen by anyone else.`, flags: MessageFlags.Ephemeral });
 
     try {
     

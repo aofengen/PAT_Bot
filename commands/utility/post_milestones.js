@@ -24,7 +24,7 @@ export async function execute(interaction) {
 
     if (member.roles.cache.some(role => role.name === STAFF_ROLE || role.name === PRODUCER_ROLE || role.name === GC_ROLE)) {
 
-        const trackerData = await fetch(`https://tracker.preventathon.com/tracker/api/v2/events/${configModule.default.config.eventID}/milestones/`);
+        const trackerData = await fetch(`${configModule.default.config.baseTrackerUrl}/events/${configModule.default.config.eventID}/milestones/`);
 
         if (!trackerData.ok) {
             return await interaction.reply({
