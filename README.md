@@ -10,7 +10,7 @@
         "prodOutputChannel": "", //production discord channel to output posts 
         "testOutputChannel": "", //testing production discord channel to output posts
         "safetyStaffChannel": "", //safety staff channel in your server
-        "baseTrackerUrl": "", //base URL for tracker instance being used
+        "baseTrackerUrl": "", //base URL for tracker instance being used (include /api/v2)
         "eventID": "", //tracker event ID being used
         "staffRole": "", //name of staff role in your server
         "safetyRole": "", //name of safety staff role in your server
