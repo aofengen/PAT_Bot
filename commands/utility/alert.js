@@ -47,10 +47,4 @@ export async function execute(interaction) {
     await safetyChannel.send({ content: `Send reporter acknowledgement of report receipt:`, components: [buttonRow], withResponse: true });
 
     await interaction.reply({ content: `${SAFETY_STAFF_ROLE} alerted. Thank you for the report. This message cannot be seen by anyone else.`, flags: MessageFlags.Ephemeral });
-
-    try {
-    
-    } catch {
-
-    }
 }
