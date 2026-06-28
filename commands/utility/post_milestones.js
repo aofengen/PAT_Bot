@@ -94,7 +94,7 @@ export async function execute(interaction) {
                     console.log('Looking for run ID:', targetRunId);
 
                     let allRuns = [];
-                    let nextUrl = `https://tracker.preventathon.com/tracker/api/v2/runs/?limit=500`;
+                    let nextUrl = `${configModule.default.config.baseTrackerUrl}/runs/?limit=500`;
 
                     // Fetch all pages
                     while (nextUrl) {
