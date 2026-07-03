@@ -66,41 +66,41 @@ export async function execute(interaction) {
                 let commentatorPronouns = [];
 
                 newObj.name = currentRun.name;
-                newObj.category = currentRun.category || "";
-                newObj.console = currentRun.console || "";
-                newObj.estimate = currentRun.run_time || "";
-                newObj.layout = currentRun.layout || "";
+                newObj.category = currentRun.category || "Not Provided";
+                newObj.console = currentRun.console || "Not Provided";
+                newObj.estimate = currentRun.run_time || "Not Provided";
+                newObj.layout = currentRun.layout || "Not Provided";
 
                 if (currentRun.hosts.length == 0) {
-                    newObj.host = "None";
+                    newObj.host = "Not Assigned Yet";
                     newObj.hostPronouns = "";
                 } else {
                     newObj.host = currentRun.hosts[0].name;
-                    newObj.hostPronouns = currentRun.hosts[0].pronouns != "" ? currentRun.hosts[0].pronouns : "No Pronouns";
+                    newObj.hostPronouns = currentRun.hosts[0].pronouns != "" ? currentRun.hosts[0].pronouns : "No Pronouns Provided";
                 }
 
                 if (currentRun.runners.length == 1) {
                     newObj.runners = currentRun.runners[0].name;
-                    newObj.runnerPronouns = currentRun.runners[0].pronouns != "" ? currentRun.runners[0].pronouns : "No Pronouns";
+                    newObj.runnerPronouns = currentRun.runners[0].pronouns != "" ? currentRun.runners[0].pronouns : "No Pronouns Provided";
                 } else {
                     for (let j = 0; j < currentRun.runners.length; j++) {
                         runnerNames.push(currentRun.runners[j].name);
-                        runnerPronouns.push(currentRun.runners[j].pronouns != "" ? currentRun.runners[j].pronouns : "No Pronouns");
+                        runnerPronouns.push(currentRun.runners[j].pronouns != "" ? currentRun.runners[j].pronouns : "No Pronouns Provided");
                     }
                     newObj.runners = runnerNames;
                     newObj.runnerPronouns = runnerPronouns;
                 }
 
                 if (currentRun.commentators.length == 0) {
-                    newObj.commentators = "None";
+                    newObj.commentators = "None Provided";
                     newObj.commentatorPronouns = "";
                 } else if (currentRun.commentators.length == 1) {
                     newObj.commentators = currentRun.commentators[0].name;
-                    newObj.commentatorPronouns = currentRun.commentators[0].pronouns != "" ? currentRun.commentators[0].pronouns : "No Pronouns";
+                    newObj.commentatorPronouns = currentRun.commentators[0].pronouns != "" ? currentRun.commentators[0].pronouns : "No Pronouns Provided";
                 } else {
                     for (let j = 0; j < currentRun.commentators.length; j++) {
                         commentatorNames.push(currentRun.commentators[j].name);
-                        commentatorPronouns.push(currentRun.commentators[j].pronouns != "" ? currentRun.commentators[j].pronouns : "No Pronouns");
+                        commentatorPronouns.push(currentRun.commentators[j].pronouns != "" ? currentRun.commentators[j].pronouns : "No Pronouns Provided");
                     }
                     newObj.commentators = commentatorNames;
                     newObj.commentatorPronouns = commentatorPronouns;
@@ -119,7 +119,7 @@ export async function execute(interaction) {
                 }
 
                 if (!Array.isArray(newObj.hosts)) {
-                    if (newObj.host == "None") {
+                    if (newObj.host == "Not Assigned Yet") {
                         hosts = `${newObj.host}`;
                     } else {
                         hosts = `${newObj.host} \(${newObj.hostPronouns})`;
@@ -131,7 +131,7 @@ export async function execute(interaction) {
                 }
 
                 if (!Array.isArray(newObj.commentators)) {
-                    if (newObj.commentators == "None") {
+                    if (newObj.commentators == "None Provided") {
                         comms = `${newObj.commentators}`;
                     } else {
                         comms = `${newObj.commentators} \(${newObj.commentatorPronouns})`;
