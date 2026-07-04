@@ -1,4 +1,5 @@
 import { PermissionFlagsBits, SlashCommandBuilder, MessageFlags } from "discord.js";
+import * as configModule from '../../config.json' with { type: "json" };
 
 export const data = new SlashCommandBuilder()
     .setName('alert')
