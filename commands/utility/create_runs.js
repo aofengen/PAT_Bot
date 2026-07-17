@@ -28,7 +28,7 @@ export const data = new SlashCommandBuilder()
         .setName('filename')
         .setDescription('file must be present in the backup runs directory. do not include json extension')
         .setRequired(false))
-    .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels);
+    .setDefaultMemberPermissions(PermissionFlagsBits.ViewChannel);
 export async function execute(interaction) {
     let member = interaction.member.guild;
     if (member.roles.cache.find(role => role.name === STAFF_ROLE)) {
