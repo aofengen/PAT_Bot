@@ -1,4 +1,5 @@
-import { PermissionFlagsBits, SlashCommandBuilder, MessageFlags } from "discord.js";
+import { PermissionFlagsBits, SlashCommandBuilder, MessageFlags, ButtonStyle} from "discord.js";
+import { ActionRowBuilder, ButtonBuilder } from '@discordjs/builders';
 import * as configModule from '../../config.json' with { type: "json" };
 
 export const data = new SlashCommandBuilder()
