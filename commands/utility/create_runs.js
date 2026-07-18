@@ -111,6 +111,7 @@ async function create_runs(interaction,obj,eventName){
             newObj.console = currentRun.console || "Not Provided";
             newObj.estimate = currentRun.run_time || "Not Provided";
             newObj.layout = currentRun.layout || "Not Provided";
+            newObj.onsite = (currentRun.onsite === "ONSITE" ? "In Person" : "Online")  || "Not Provided";
 
             if (currentRun.hosts.length == 0) {
                 newObj.host = "Not Assigned Yet";
@@ -192,7 +193,7 @@ async function create_runs(interaction,obj,eventName){
             }
 
             const newMessage = `Game: ${newObj.name}\nCategory: ${newObj.category}\nPlatform: ${newObj.console}\nRun Estimate: ${newObj.estimate}\n` +
-                `Layout: ${newObj.layout}\nRunners: ${runners}\nCommentators: ${comms}\nHost: ${hosts}\n\nTech Notes: ${techNotes}`.trimStart();
+                `Layout: ${newObj.layout}\nRun Location: ${newObj.onsite}\nRunners: ${runners}\nCommentators: ${comms}\nHost: ${hosts}\n\nTech Notes: ${techNotes}`.trimStart();
 
             console.log(`\nRun Info for ${newObj.name}:`);
             console.log(newMessage);
