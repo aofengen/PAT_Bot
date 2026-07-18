@@ -1,7 +1,6 @@
 import { PermissionFlagsBits, SlashCommandBuilder, MessageFlags, ButtonStyle} from "discord.js";
 import { ActionRowBuilder, ButtonBuilder } from '@discordjs/builders';
 import * as configModule from '../../config.json' with { type: "json" };
-
 export const data = new SlashCommandBuilder()
     .setName('alert')
     .setDescription('Ping Safety Staff for any reason.')
