@@ -8,4 +8,5 @@ export async function execute(interaction) {
         content: "Pong!\n-# Bot is live!",
         flags: MessageFlags.Ephemeral
     });
+
 }

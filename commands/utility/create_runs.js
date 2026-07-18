@@ -20,23 +20,22 @@ export const data = new SlashCommandBuilder()
         .setRequired(true))
     .addBooleanOption(option => option
         .setName('fromfile')
-        .setDescription('Create/Update backup runs from provided JSON File (must provide a filename if true or things blow up')
+        .setDescription('Create/Update backup runs from provided JSON File.')
         .setRequired(true))
-    .addStringOption(option => option
-        .setName('filename')
-        .setDescription('file must be present in the backup runs directory. do not include json extension')
-        .setRequired(false))
+    .addAttachmentOption(option =>option
+        .setName("jsonfile")
+        .setDescription("JSON File to pull backup runs from.")
+    )
     .setDefaultMemberPermissions(PermissionFlagsBits.ViewChannel);
 export async function execute(interaction) {
     let member = interaction.member.guild;
     if (member.roles.cache.find(role => role.name === STAFF_ROLE)) {
         const fromFile = interaction.options.getBoolean('fromfile');
-        const fileName = interaction.options.getString('filename');
         if (fromFile === true) {
-            let trackerData = readFileSync(`./backup_runs/${fileName}.json`);
+            const trackerData = await handleAttachedFile(interaction.options.getAttachment('jsonfile'))
+            await interaction.reply({ content: 'Parsing JSON file...',flags: MessageFlags.Loading});
             let obj = JSON.parse(trackerData);
-            await interaction.reply({ content: 'looking for file...',flags: MessageFlags.Loading});
-            create_runs(interaction,obj,fileName);
+            create_runs(interaction,obj,"JSON File");
         } else {
             fetch_runs(interaction);
         }
@@ -44,6 +43,13 @@ export async function execute(interaction) {
         await interaction.reply({ content: 'Not authorized to run this command!', flags: MessageFlags.Ephemeral });
     }
 }
+//Pulling data from attached file
+async function handleAttachedFile(attachment){
+    const attachedFile = await fetch(attachment.attachment);
+    const data = await attachedFile.text();
+    return data.trim();
+};
+
 //Not pulling runs from a file so first ask the user which event on the tracker to pull runs from.
 async function fetch_runs(interaction){
     let eventsData = await fetch(`${BASE_TRACKER_URL}/events/`);
@@ -251,7 +257,7 @@ async function create_runs(interaction,obj,eventName){
         }
     }
     await interaction.editReply({
-        content: `Finished setting up all runs for ${eventName}!`,
+        content: `Finished setting up all runs from ${eventName}!`,
         flags: 0,
         components:[],
         withResponse: false,
