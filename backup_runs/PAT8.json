@@ -1,5 +1,5 @@
 {
-    "count": 17,
+    "count": 16,
     "results": [
         {
             "name": "[BACKUP RUN] Bejeweled 3",
@@ -156,23 +156,6 @@
             }],
             "hosts": [],
             "commentators": [],
-            "priority_tag": ""
-        },
-        {
-            "name": "[BACKUP RUN] Pokemon Emerald",
-            "category": "Full Item Randomizer",
-            "console": "GBA",
-            "run_time": "2:45:00",
-            "layout": "16x9_1P",
-            "runners": [{
-                "name": "Chafee",
-                "pronouns": "she/they"
-            }],
-            "hosts": [],
-            "commentators": [{
-                "name": "Toronite",
-                "pronouns": "he/any"
-            }],
             "priority_tag": ""
         },
         {
