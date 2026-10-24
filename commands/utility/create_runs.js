@@ -248,7 +248,6 @@ async function create_runs(interaction,obj,eventName){
                     await threadInitMsg.edit({ embeds: [newEmbed] });
 
                     console.log(`Updated embed in thread: ${newObj.name}`);
-                    await interaction.reply('Runs for event #' + eventID + ' pulled!');
                     await new Promise(resolve => setTimeout(resolve, 1000));
                 } catch (e) {
                     console.error(e);
