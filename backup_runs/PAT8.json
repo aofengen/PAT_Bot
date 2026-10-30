@@ -82,7 +82,7 @@
             "layout": "16x9_1P",
             "runners": [{
                 "name": "aggymon",
-                "pronouns": "she/it"
+                "pronouns": "she/it/they"
             }],
             "hosts": [],
             "commentators": [],
@@ -103,7 +103,7 @@
             "priority_tag": "flashing_lights"
         },
         {
-            "name": "[BACKUP RUN] Mt. Platformer",
+            "name": "[BACKUP RUN] Mr. Platformer",
             "category": "Full Game",
             "console": "PC",
             "run_time": "0:17:00",
@@ -141,7 +141,10 @@
                 "pronouns": "she/they"
             }],
             "hosts": [],
-            "commentators": [],
+            "commentators": [{
+                "name": "Roxie",
+                "pronouns": "she/her"
+            }],
             "priority_tag": ""
         },
         {
@@ -193,11 +196,22 @@
             "run_time": "1:30:00",
             "layout": "4x3_1P",
             "runners": [{
-                "name": "TurtleRun2412",
-                "pronouns": "No Pronouns"
+                "name": "Demasu",
+                "pronouns": "she/her"
             }],
             "hosts": [],
-            "commentators": [],
+            "commentators": [{
+                "name": "Kit Rose",
+                "pronouns": "They/Them"
+            },
+            {
+                "name": "Morticia",
+                "pronouns": "She/her"
+            },
+            {
+                "name": "orkybash",
+                "pronouns": "she/her"
+            }],
             "priority_tag": "flashing_lights"
         },
         {
